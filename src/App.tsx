@@ -1,115 +1,258 @@
 import { useEffect, useMemo, useState } from 'react';
 import { portfolio } from './data/portfolio';
-import type { ExperienceItem, Locale, ProjectItem, SkillGroup } from './data/portfolio';
+import type { ExperienceItem, ProjectItem, PortfolioTone, SkillGroup, PortfolioIconId, TechStackItem } from './data/portfolio';
+import { IconType } from 'react-icons';
+import {
+  FaBrain,
+  FaChartLine,
+  FaBullseye,
+  FaBolt,
+  FaCode,
+  FaLock,
+  FaDatabase,
+  FaCloud,
+  FaRobot,
+  FaCogs,
+  FaRocket,
+  FaGlobe,
+  FaDocker,
+  FaGithub,
+  FaTachometerAlt,
+  FaSearch,
+  FaFlask,
+  FaEye,
+  FaPython,
+  FaJsSquare,
+  FaServer,
+  FaWrench,
+  FaTools,
+} from 'react-icons/fa';
+import {
+  SiNextdotjs,
+  SiFastapi,
+  SiPytorch,
+  SiOpenai,
+  SiLangchain,
+  SiRedis,
+  SiRust,
+  SiCplusplus,
+  SiNumpy,
+  SiPandas,
+  SiGithubactions,
+} from 'react-icons/si';
 
 type Section = 'summary' | 'experience' | 'projects' | 'skills' | 'contact';
 
 type SectionItem = {
   id: Section;
-  label: {
-    en: string;
-    ko: string;
-  };
+  label: string;
 };
 
 const sections: SectionItem[] = [
-  { id: 'summary', label: { en: 'Summary', ko: '요약' } },
-  { id: 'experience', label: { en: 'Experience', ko: '경력' } },
-  { id: 'projects', label: { en: 'Projects', ko: '프로젝트' } },
-  { id: 'skills', label: { en: 'Skills', ko: '기술' } },
-  { id: 'contact', label: { en: 'Contact', ko: '연락처' } },
+  { id: 'summary', label: 'Summary' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'contact', label: 'Contact' },
 ];
 
 const label = {
-  en: {
-    brand: 'KH Portfolio',
-    eyebrow: 'Machine Learning Systems Engineer',
-    actions: {
-      explore: 'Explore Projects',
-      resume: 'Download Resume',
-      contact: 'Contact Me',
-      projectDetail: 'Open project detail',
-      backToProjects: 'Back to projects',
-      share: 'Discuss your project',
-    },
-    summary: 'Summary',
-    experience: 'Professional Experience',
-    projects: 'Selected Projects',
-    skills: 'Technical Skills',
-    contactTitle: 'Contact',
-    locationLabel: 'Location',
-    educationLabel: 'Education',
-    certLabel: 'Certifications',
-    phoneLabel: 'Phone',
-    bannerMessage:
-      'Tell me your team context and I can suggest an implementation plan in a practical stack.',
-    contactText: 'Need help with ML inference and deployment strategy? Let me know what you want to solve.',
-    approach: 'Approach',
-    outcomes: 'Outcomes',
-    techStack: 'Tech Stack',
-    notes: 'Notes',
-    linkedInLabel: 'LinkedIn',
-    githubLabel: 'GitHub',
-    links: 'Related Links',
-    detail: 'Project Detail',
-    projectNotFound: 'Project not found',
-    return: 'Return',
-    contactLabel: 'email',
+  brand: 'KH Portfolio',
+  eyebrow: 'AI Systems Engineer',
+  actions: {
+    explore: 'Explore Projects',
+    resume: 'Download Resume',
+    contact: 'Contact Me',
+    projectDetail: 'Open project detail',
+    backToProjects: 'Back to projects',
+    share: 'Discuss your project',
   },
-  ko: {
-    brand: 'KH 포트폴리오',
-    eyebrow: '머신러닝 시스템 엔지니어',
-    actions: {
-      explore: '프로젝트 보기',
-      resume: '이력서 다운로드',
-      contact: '연락하기',
-      projectDetail: '프로젝트 상세 보기',
-      backToProjects: '목록으로',
-      share: '상담 요청하기',
-    },
-    summary: '요약',
-    experience: '경력',
-    projects: '선택한 프로젝트',
-    skills: '보유 스킬',
-    contactTitle: '연락처',
-    locationLabel: '위치',
-    educationLabel: '학력',
-    certLabel: '자격',
-    phoneLabel: '전화',
-    bannerMessage: '팀 상황을 알려주시면 현실적인 기술 스택으로 실행 계획을 제안하겠습니다.',
-    contactText: 'AI 추론/배포 전략이 필요한 프로젝트가 있다면 언제든지 공유해 주세요.',
-    approach: '접근 방식',
-    outcomes: '결과',
-    techStack: '기술 스택',
-    notes: '메모',
-    linkedInLabel: '링크드인',
-    githubLabel: '깃허브',
-    links: '관련 링크',
-    detail: '프로젝트 상세',
-    projectNotFound: '프로젝트를 찾을 수 없습니다',
-    return: '목록으로',
-    contactLabel: '이메일',
-  },
+  summary: 'Summary',
+  experience: 'Professional Experience',
+  projects: 'Selected Projects',
+  skills: 'Technical Skills',
+  contactTitle: 'Contact',
+  educationLabel: 'Education',
+  certLabel: 'Certifications',
+  phoneLabel: 'Phone',
+  bannerMessage: 'Tell me your team context and I can suggest an implementation plan in a practical stack.',
+  contactText: 'Need help with ML inference and deployment strategy? Let me know what you want to solve.',
+  approach: 'Approach',
+  outcomes: 'Outcomes',
+  techStack: 'Tech Stack',
+  notes: 'Notes',
+  linkedInLabel: 'LinkedIn',
+  githubLabel: 'GitHub',
+  links: 'Related Links',
+  detail: 'Project Detail',
+  projectNotFound: 'Project not found',
+  return: 'Return',
+  contactLabel: 'Email',
 };
 
-function Anchor({ section, locale }: { section: Section; locale: Locale }) {
-  const item = sections.find((x) => x.id === section);
-  return <a href={getSectionHash(locale, section)}>{item?.label[locale] ?? section}</a>;
+const toneLabelMap: Record<PortfolioTone, string> = {
+  ai: 'AI',
+  backend: 'Backend',
+  cloud: 'Cloud',
+  data: 'Data',
+  language: 'Language',
+  ops: 'Ops',
+  infra: 'Infra',
+};
+
+const toneIconMap: Record<PortfolioTone, IconType> = {
+  ai: FaBrain,
+  backend: FaServer,
+  cloud: FaCloud,
+  data: FaDatabase,
+  language: FaCode,
+  ops: FaWrench,
+  infra: FaTools,
+};
+
+const portfolioIconMap: Record<PortfolioIconId, IconType> = {
+  brain: FaBrain,
+  chartLine: FaChartLine,
+  target: FaBullseye,
+  bolt: FaBolt,
+  code: FaCode,
+  lock: FaLock,
+  database: FaDatabase,
+  stream: FaRocket,
+  cloud: FaCloud,
+  robot: FaRobot,
+  cogs: FaCogs,
+  rocket: FaRocket,
+  globe: FaGlobe,
+  docker: FaDocker,
+  github: FaGithub,
+  tachometer: FaTachometerAlt,
+  search: FaSearch,
+  flask: FaFlask,
+  eye: FaEye,
+  python: FaPython,
+  js: FaJsSquare,
+  nextjs: SiNextdotjs,
+  azure: FaCloud,
+  openai: SiOpenai,
+  fastapi: SiFastapi,
+  langchain: SiLangchain,
+  rag: FaRobot,
+  cpp: SiCplusplus,
+  rust: SiRust,
+  pytorch: SiPytorch,
+  redis: SiRedis,
+  numpy: SiNumpy,
+  pandas: SiPandas,
+  sql: FaDatabase,
+  sse: FaTachometerAlt,
+  githubActions: SiGithubactions,
+};
+
+const resumeFileName = 'main_resume_kimhyoyeol.pdf';
+
+function getChipClass(base: string, tone?: PortfolioTone) {
+  const toneClass = tone ? `chip-${tone}` : 'chip-default';
+  return `${base} ${toneClass}`;
 }
 
-function getLocaleFromHash(hash: string): Locale | null {
-  const match = hash.match(/^#\/(en|ko)(?:\/|$)/);
-  return match ? (match[1] as Locale) : null;
+function renderChipIcon(iconId: PortfolioIconId) {
+  const Icon = portfolioIconMap[iconId];
+  return <Icon className="skill-icon" aria-hidden="true" />;
+}
+
+function getTooltipText(name: string, iconLabel?: string, tooltip?: string) {
+  const title = iconLabel ?? name;
+  if (!tooltip || tooltip === title) {
+    return title;
+  }
+  return `${title}\n${tooltip}`;
+}
+
+function ToneBadge({ tone, showLabel }: { tone: PortfolioTone; showLabel: boolean }) {
+  const Icon = toneIconMap[tone];
+  return (
+    <span className={`chip-tone chip-tone-${tone}`} aria-hidden="true">
+      {showLabel && <Icon className="chip-tone-icon" />}
+      <span>{toneLabelMap[tone]}</span>
+    </span>
+  );
+}
+
+function StackIcons({ items, showToneLabel }: { items: TechStackItem[]; showToneLabel: boolean }) {
+  return (
+    <div className="chips">
+      {items.map((item, index) => {
+        const tooltip = getTooltipText(item.name, item.iconLabel, item.tooltip);
+        return (
+          <span
+            key={`${item.name}-${index}`}
+            className={getChipClass('chip stacked', item.tone)}
+            aria-label={`${tooltip} stack`}
+            title={tooltip}
+            data-tooltip={tooltip}
+            tabIndex={0}
+          >
+            <span className="skill-icon-wrap" aria-hidden="true">
+              {renderChipIcon(item.icon)}
+            </span>
+            {item.tone && showToneLabel ? <ToneBadge tone={item.tone} showLabel /> : null}
+            <span>{item.name}</span>
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+function SkillChip({
+  icon,
+  name,
+  iconLabel,
+  tone,
+  hasTone,
+  tooltip,
+  showToneLabel,
+}: {
+  icon: PortfolioIconId;
+  name: string;
+  iconLabel?: string;
+  tone?: PortfolioTone;
+  tooltip?: string;
+  hasTone: boolean;
+  showToneLabel: boolean;
+}) {
+  const tooltipText = getTooltipText(name, iconLabel, tooltip);
+  return (
+    <span
+      className={getChipClass('chip', tone)}
+      aria-label={`${tooltipText} skill`}
+      title={tooltipText}
+      data-tooltip={tooltipText}
+      tabIndex={0}
+    >
+      <span className="skill-icon-wrap" aria-hidden="true">
+        {renderChipIcon(icon)}
+      </span>
+      {hasTone && tone && showToneLabel ? <ToneBadge tone={tone} showLabel /> : null}
+      <span>{name}</span>
+    </span>
+  );
+}
+
+function Anchor({ section }: { section: Section }) {
+  const item = sections.find((x) => x.id === section);
+  return <a href={getSectionHash(section)}>{item?.label ?? section}</a>;
 }
 
 function getSectionFromHash(hash: string): Section | null {
-  const match = hash.match(/^#(?:\/(?:en|ko))?\/?(summary|experience|projects|skills|contact)$/);
+  const match = hash.match(/^#\/?(summary|experience|projects|skills|contact)$/);
   if (match) {
     return match[1] as Section;
   }
 
-  const isLocaleRoot = hash.match(/^#\/(?:en|ko)\/?$/);
-  if (isLocaleRoot) {
+  const root = hash.match(/^#\/$/);
+  if (root || hash === '#' || hash === '' ) {
     return 'summary';
   }
 
@@ -117,29 +260,24 @@ function getSectionFromHash(hash: string): Section | null {
 }
 
 function getProjectSlugFromHash(hash: string) {
-  const matchWithLocale = hash.match(/^#\/(?:en|ko)\/project\/([^/?#]+)/);
-  if (matchWithLocale) {
-    return decodeURIComponent(matchWithLocale[1]);
-  }
-
   const match = hash.match(/^#\/project\/([^/?#]+)/);
   return match ? decodeURIComponent(match[1]) : null;
 }
 
-function getProjectDetailHash(locale: Locale, slug: string) {
-  return `#/${locale}/project/${encodeURIComponent(slug)}`;
+function getProjectDetailHash(slug: string) {
+  return `#/project/${encodeURIComponent(slug)}`;
 }
 
-function getSectionHash(locale: Locale, section: Section) {
-  return `#/${locale}/${section}`;
+function getSectionHash(section: Section) {
+  return `#/${section}`;
 }
 
-function resolve(locale: Locale, value: { en: string; ko: string }) {
-  return value[locale];
+function resolveText(value: { en: string }) {
+  return value.en;
 }
 
-function resolveList(locale: Locale, value: { en: string[]; ko: string[] }) {
-  return value[locale];
+function resolveList(value: { en: string[] }) {
+  return value.en;
 }
 
 function normalizeUrl(value: string) {
@@ -150,18 +288,18 @@ function normalizePhoneHref(phone: string) {
   return `tel:${phone.replace(/[^0-9+]/g, '')}`;
 }
 
-function ExperienceBlock({ data, locale }: { data: ExperienceItem; locale: Locale }) {
+function ExperienceBlock({ data }: { data: ExperienceItem }) {
   return (
     <article className="timeline-card">
       <header>
-        <h3>{resolve(locale, data.role)}</h3>
+        <h3>{resolveText(data.role)}</h3>
         <p className="meta">
-          {resolve(locale, data.company)} · {resolve(locale, data.location)}
+          {resolveText(data.company)} · {resolveText(data.location)}
         </p>
-        <p className="meta subtle">{resolve(locale, data.period)}</p>
+        <p className="meta subtle">{resolveText(data.period)}</p>
       </header>
       <ul>
-        {resolveList(locale, data.details).map((item) => (
+        {resolveList(data.details).map((item) => (
           <li key={item}>{item}</li>
         ))}
       </ul>
@@ -169,65 +307,64 @@ function ExperienceBlock({ data, locale }: { data: ExperienceItem; locale: Local
   );
 }
 
-function SkillBlock({ data, locale }: { data: SkillGroup; locale: Locale }) {
+function SkillBlock({ data, showToneLabel }: { data: SkillGroup; showToneLabel: boolean }) {
   return (
     <section className="skill-group">
-      <h4>{resolve(locale, data.group)}</h4>
+      <h4>{resolveText(data.group)}</h4>
       <div className="chips">
-        {resolveList(locale, data.items).map((item) => (
-          <span key={item} className="chip">
-            {item}
-          </span>
+        {data.items.en.map((item) => (
+          <SkillChip
+            key={`${item.name}-${item.icon}`}
+            icon={item.icon}
+            name={item.name}
+            iconLabel={item.iconLabel}
+            tone={item.tone}
+            tooltip={item.tooltip}
+            hasTone
+            showToneLabel={showToneLabel}
+          />
         ))}
       </div>
     </section>
   );
 }
 
-function ProjectCard({ data, locale }: { data: ProjectItem; locale: Locale }) {
-  const ui = label[locale];
-
+function ProjectCard({ data, showStackToneLabel }: { data: ProjectItem; showStackToneLabel: boolean }) {
   return (
     <article className="project-card">
       <header className="project-header">
-        <h3>{resolve(locale, data.title)}</h3>
-        <p className="meta">{resolve(locale, data.period)}</p>
+        <h3>{resolveText(data.title)}</h3>
+        <p className="meta">{resolveText(data.period)}</p>
       </header>
-      <p className="role">{resolve(locale, data.role)}</p>
-      <p>{resolve(locale, data.problem)}</p>
-      <p className="meta section-subtitle">{ui.approach}</p>
+      <p className="role">{resolveText(data.role)}</p>
+      <p>{resolveText(data.problem)}</p>
+      <p className="meta section-subtitle">{label.approach}</p>
       <ul>
-        {resolveList(locale, data.approach).map((step) => (
+        {resolveList(data.approach).map((step) => (
           <li key={step}>{step}</li>
         ))}
       </ul>
-      <p className="meta section-subtitle">{ui.outcomes}</p>
+      <p className="meta section-subtitle">{label.outcomes}</p>
       <ul>
-        {resolveList(locale, data.outcomes).map((result) => (
+        {resolveList(data.outcomes).map((result) => (
           <li key={result}>{result}</li>
         ))}
       </ul>
-      <p className="meta section-subtitle">{ui.techStack}</p>
-      <div className="chips">
-        {data.stack.map((item) => (
-          <span key={item} className="chip stacked">
-            {item}
-          </span>
-        ))}
-      </div>
+      <p className="meta section-subtitle">{label.techStack}</p>
+      <StackIcons items={data.stack} showToneLabel={showStackToneLabel} />
       <div className="project-actions">
-        <a href={getProjectDetailHash(locale, data.slug)} className="btn-secondary">
-          {ui.actions.projectDetail}
+        <a href={getProjectDetailHash(data.slug)} className="btn-secondary">
+          {label.actions.projectDetail}
         </a>
       </div>
       {data.links && data.links.length > 0 && (
         <details className="notes-details">
-          <summary>{ui.links}</summary>
+          <summary>{label.links}</summary>
           <p className="project-links">
             {data.links.map((link, i) => (
               <span key={`${link.href}-${i}`}>
                 <a href={link.href} target="_blank" rel="noreferrer">
-                  {resolve(locale, link.label)}
+                  {resolveText(link.label)}
                 </a>
                 {i < data.links!.length - 1 ? ' · ' : ''}
               </span>
@@ -235,11 +372,11 @@ function ProjectCard({ data, locale }: { data: ProjectItem; locale: Locale }) {
           </p>
         </details>
       )}
-      {data.notes && data.notes.length > 0 && (
+      {data.notes && resolveList(data.notes).length > 0 && (
         <details className="notes-details">
-          <summary>{ui.notes}</summary>
+          <summary>{label.notes}</summary>
           <ul>
-            {resolveList(locale, data.notes).map((note) => (
+            {resolveList(data.notes).map((note) => (
               <li key={note}>{note}</li>
             ))}
           </ul>
@@ -251,61 +388,54 @@ function ProjectCard({ data, locale }: { data: ProjectItem; locale: Locale }) {
 
 function ProjectDetail({
   data,
-  locale,
   onBack,
+  showStackToneLabel,
 }: {
   data: ProjectItem;
-  locale: Locale;
   onBack: () => void;
+  showStackToneLabel: boolean;
 }) {
-  const ui = label[locale];
   return (
     <article className="project-detail">
       <h3>
-        {ui.detail}: {resolve(locale, data.title)}
+        {label.detail}: {resolveText(data.title)}
       </h3>
-      <p className="meta">{resolve(locale, data.period)}</p>
-      <p className="role">{resolve(locale, data.role)}</p>
-      <p>{resolve(locale, data.problem)}</p>
-      <p className="meta section-subtitle">{ui.approach}</p>
+      <p className="meta">{resolveText(data.period)}</p>
+      <p className="role">{resolveText(data.role)}</p>
+      <p>{resolveText(data.problem)}</p>
+      <p className="meta section-subtitle">{label.approach}</p>
       <ul>
-        {resolveList(locale, data.approach).map((step) => (
+        {resolveList(data.approach).map((step) => (
           <li key={step}>{step}</li>
         ))}
       </ul>
-      <p className="meta section-subtitle">{ui.outcomes}</p>
+      <p className="meta section-subtitle">{label.outcomes}</p>
       <ul>
-        {resolveList(locale, data.outcomes).map((result) => (
+        {resolveList(data.outcomes).map((result) => (
           <li key={result}>{result}</li>
         ))}
       </ul>
-      <p className="meta section-subtitle">{ui.techStack}</p>
-      <div className="chips">
-        {data.stack.map((item) => (
-          <span key={item} className="chip stacked">
-            {item}
-          </span>
-        ))}
-      </div>
+      <p className="meta section-subtitle">{label.techStack}</p>
+      <StackIcons items={data.stack} showToneLabel={showStackToneLabel} />
       {data.links && data.links.length > 0 && (
         <p className="project-links">
-          <strong>{ui.links}:</strong>
-            {data.links.map((link, i) => (
+          <strong>{label.links}:</strong>
+          {data.links.map((link, i) => (
             <span key={`${link.href}-${i}`}>
               {' '}
               <a href={link.href} target="_blank" rel="noreferrer">
-                {resolve(locale, link.label)}
+                {resolveText(link.label)}
               </a>
               {i < data.links!.length - 1 ? ' · ' : ''}
             </span>
           ))}
         </p>
       )}
-      {data.notes && data.notes.length > 0 && (
+      {data.notes && resolveList(data.notes).length > 0 && (
         <details className="notes-details">
-          <summary>{ui.notes}</summary>
+          <summary>{label.notes}</summary>
           <ul>
-            {resolveList(locale, data.notes).map((note) => (
+            {resolveList(data.notes).map((note) => (
               <li key={note}>{note}</li>
             ))}
           </ul>
@@ -313,48 +443,18 @@ function ProjectDetail({
       )}
       <div className="project-actions">
         <button type="button" className="btn-secondary" onClick={onBack}>
-          {ui.actions.backToProjects}
+          {label.actions.backToProjects}
         </button>
       </div>
     </article>
   );
 }
 
-function LanguageSwitch({
-  locale,
-  onToggle,
-}: {
-  locale: Locale;
-  onToggle: (next: Locale) => void;
-}) {
-  return (
-    <div className="lang-switch" aria-label="language switch">
-      <button type="button" onClick={() => onToggle('en')} className={locale === 'en' ? 'active' : ''}>
-        EN
-      </button>
-      <button type="button" onClick={() => onToggle('ko')} className={locale === 'ko' ? 'active' : ''}>
-        KR
-      </button>
-    </div>
-  );
-}
-
 function App() {
-  const [locale, setLocale] = useState<Locale>(() => {
-    const hashLocale = getLocaleFromHash(window.location.hash);
-    if (hashLocale) {
-      return hashLocale;
-    }
-
-    const saved = window?.localStorage?.getItem('portfolioLocale');
-    if (saved === 'en' || saved === 'ko') {
-      return saved;
-    }
-    const browserLocale = window?.navigator?.language?.toLowerCase();
-    return browserLocale?.startsWith('ko') ? 'ko' : 'en';
-  });
   const [slug, setSlug] = useState<string | null>(getProjectSlugFromHash(window.location.hash));
-  const ui = label[locale];
+  const [showSkillToneLabel, setShowSkillToneLabel] = useState(false);
+  const [showStackToneLabel, setShowStackToneLabel] = useState(false);
+
   const scrollToSection = (section: Section) => {
     const target = document.getElementById(section);
     if (target) {
@@ -363,40 +463,11 @@ function App() {
   };
 
   const handleHashChange = () => {
-    const nextLocale = getLocaleFromHash(window.location.hash);
-    if (nextLocale) {
-      setLocale(nextLocale);
-    }
     const nextSlug = getProjectSlugFromHash(window.location.hash);
     const nextSection = getSectionFromHash(window.location.hash);
     setSlug(nextSlug);
     if (!nextSlug && nextSection) {
       scrollToSection(nextSection);
-    }
-  };
-
-  const syncHashLocale = (nextLocale: Locale) => {
-    const hash = window.location.hash;
-    const nextProjectSlug = getProjectSlugFromHash(hash);
-    const nextSection = getSectionFromHash(hash);
-    let nextHash = hash;
-
-    if (/^#\/(?:en|ko)\/project\//.test(hash) && nextProjectSlug) {
-      nextHash = getProjectDetailHash(nextLocale, nextProjectSlug);
-    } else if (/^#\/project\//.test(hash) && nextProjectSlug) {
-      nextHash = getProjectDetailHash(nextLocale, nextProjectSlug);
-    } else if (nextSection) {
-      nextHash = getSectionHash(nextLocale, nextSection);
-    } else if (/^#\/(?:en|ko)\b/.test(hash)) {
-      nextHash = hash.replace(/^#\/(?:en|ko)/, `#/${nextLocale}`);
-    } else if (nextProjectSlug) {
-      nextHash = getProjectDetailHash(nextLocale, nextProjectSlug);
-    } else if (hash === '' || hash === '#') {
-      nextHash = `#/${nextLocale}`;
-    }
-
-    if (nextHash !== hash) {
-      window.history.replaceState(null, '', nextHash);
     }
   };
 
@@ -410,47 +481,41 @@ function App() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  useEffect(() => {
-    window.localStorage.setItem('portfolioLocale', locale);
-    syncHashLocale(locale);
-  }, [locale]);
-
   const selectedProject = useMemo(() => portfolio.projects.find((project) => project.slug === slug), [slug]);
 
   return (
     <div className="page">
       <header className="hero">
         <nav>
-          <p className="brand">{ui.brand}</p>
+          <p className="brand">{label.brand}</p>
           {sections.map((section) => (
-            <Anchor key={section.id} section={section.id} locale={locale} />
+            <Anchor key={section.id} section={section.id} />
           ))}
-          <LanguageSwitch locale={locale} onToggle={setLocale} />
         </nav>
         <div className="hero-copy">
-          <p className="eyebrow">{resolve(locale, portfolio.title)}</p>
+          <p className="eyebrow">{portfolio.title.en}</p>
           <h1>{portfolio.name}</h1>
-          <p className="intro">{resolve(locale, portfolio.summary)}</p>
+          <p className="intro">{portfolio.summary.en}</p>
           <div className="hero-actions">
-            <a href={getSectionHash(locale, 'projects')} className="btn-primary">
-              {ui.actions.explore}
+            <a href={getSectionHash('projects')} className="btn-primary">
+              {label.actions.explore}
             </a>
-            <a href={`${import.meta.env.BASE_URL}resume_google_kimhyoyeol.pdf`} className="btn-secondary">
-              {ui.actions.resume}
+            <a href={`${import.meta.env.BASE_URL}${resumeFileName}`} className="btn-secondary">
+              {label.actions.resume}
             </a>
             <a href={`mailto:${portfolio.contact.email}`} className="btn-accent">
-              {ui.actions.contact}
+              {label.actions.contact}
             </a>
           </div>
           <p className="hero-meta">
-            <a href={`mailto:${portfolio.contact.email}`} aria-label={`${ui.contactLabel}: ${portfolio.contact.email}`}>
-              {ui.contactLabel}: {portfolio.contact.email}
+            <a href={`mailto:${portfolio.contact.email}`} aria-label={`${label.contactLabel}: ${portfolio.contact.email}`}>
+              {label.contactLabel}: {portfolio.contact.email}
             </a>
             <a
               href={normalizePhoneHref(portfolio.contact.phone)}
-              aria-label={`${ui.phoneLabel}: ${portfolio.contact.phone}`}
+              aria-label={`${label.phoneLabel}: ${portfolio.contact.phone}`}
             >
-              {ui.phoneLabel}: {portfolio.contact.phone}
+              {label.phoneLabel}: {portfolio.contact.phone}
             </a>
             <a
               href={normalizeUrl(portfolio.contact.linkedIn)}
@@ -458,7 +523,7 @@ function App() {
               rel="noreferrer"
               aria-label={`LinkedIn: ${portfolio.contact.linkedIn}`}
             >
-              {ui.linkedInLabel}: {portfolio.contact.linkedIn}
+              {label.linkedInLabel}: {portfolio.contact.linkedIn}
             </a>
             <a
               href={normalizeUrl(portfolio.contact.github)}
@@ -466,7 +531,7 @@ function App() {
               rel="noreferrer"
               aria-label={`GitHub: ${portfolio.contact.github}`}
             >
-              {ui.githubLabel}: {portfolio.contact.github}
+              {label.githubLabel}: {portfolio.contact.github}
             </a>
           </p>
         </div>
@@ -474,95 +539,116 @@ function App() {
 
       <main>
         <section id="summary" className="section">
-          <h2>{ui.summary}</h2>
-            <p>{resolve(locale, portfolio.summary)}</p>
+          <h2>{label.summary}</h2>
+          <p>{portfolio.summary.en}</p>
           <p className="meta">
-            {ui.locationLabel}: {resolve(locale, portfolio.location)}
+            {label.educationLabel}: {portfolio.education.school.en} ({portfolio.education.period.en}) — {portfolio.education.detail.en}
           </p>
           <p className="meta">
-            {ui.educationLabel}: {resolve(locale, portfolio.education.school)} ({resolve(locale, portfolio.education.period)}) —{' '}
-            {resolve(locale, portfolio.education.detail)}
-          </p>
-          <p className="meta">
-            {ui.certLabel}: {resolveList(locale, portfolio.certs).join(' · ')}
+            {label.certLabel}: {portfolio.certs.en.join(' · ')}
           </p>
         </section>
 
         <section id="experience" className="section">
-          <h2>{ui.experience}</h2>
+          <h2>{label.experience}</h2>
           <div className="timeline">
             {portfolio.experiences.map((exp) => (
-              <ExperienceBlock
-                key={`${resolve(locale, exp.company)}-${resolve(locale, exp.period)}`}
-                data={exp}
-                locale={locale}
-              />
+              <ExperienceBlock key={`${resolveText(exp.company)}-${resolveText(exp.period)}`} data={exp} />
             ))}
           </div>
         </section>
 
         <section id="projects" className="section">
-          <h2>{ui.projects}</h2>
+          <h2>{label.projects}</h2>
+          <div className="chip-controls" role="group" aria-label="Project chip options">
+            <label className="chip-toggle">
+              <input
+                type="checkbox"
+                checked={showStackToneLabel}
+                onChange={(event) => setShowStackToneLabel(event.currentTarget.checked)}
+              />
+              Stack tone labels
+            </label>
+          </div>
           {selectedProject && (
             <ProjectDetail
               data={selectedProject}
-              locale={locale}
               onBack={() => {
-                window.location.hash = getSectionHash(locale, 'projects');
+                window.location.hash = getSectionHash('projects');
                 setSlug(null);
               }}
+              showStackToneLabel={showStackToneLabel}
             />
           )}
           {!selectedProject && (
-          <div className="projects">
-            {portfolio.projects.map((project) => (
-              <ProjectCard key={project.slug} data={project} locale={locale} />
-            ))}
-          </div>
+            <div className="projects">
+              {portfolio.projects.map((project) => (
+                <ProjectCard key={project.slug} data={project} showStackToneLabel={showStackToneLabel} />
+              ))}
+            </div>
           )}
         </section>
 
         <section id="skills" className="section">
-          <h2>{ui.skills}</h2>
+          <h2>{label.skills}</h2>
+          <div className="chip-controls" role="group" aria-label="Skill chip options">
+            <label className="chip-toggle">
+              <input
+                type="checkbox"
+                checked={showSkillToneLabel}
+                onChange={(event) => setShowSkillToneLabel(event.currentTarget.checked)}
+              />
+              Skill tone labels
+            </label>
+          </div>
           <div className="skills-grid">
             {portfolio.skills.map((block) => (
-              <SkillBlock key={resolve(locale, block.group)} data={block} locale={locale} />
+              <SkillBlock key={resolveText(block.group)} data={block} showToneLabel={showSkillToneLabel} />
             ))}
           </div>
         </section>
 
         <section id="contact" className="section">
-          <h2>{ui.contactTitle}</h2>
-          <p>{ui.contactText}</p>
+          <h2>{label.contactTitle}</h2>
+          <p>{label.contactText}</p>
           <p className="meta">
-            {ui.contactLabel}: <a href={`mailto:${portfolio.contact.email}`}>{portfolio.contact.email}</a> · {ui.phoneLabel}:{' '}
-            {portfolio.contact.phone}
+            {label.contactLabel}: <a href={`mailto:${portfolio.contact.email}`}>{portfolio.contact.email}</a> · {label.phoneLabel}:{' '}
+            <a href={normalizePhoneHref(portfolio.contact.phone)}>{portfolio.contact.phone}</a>
+          </p>
+          <p className="meta">
+            <a href={normalizeUrl(portfolio.contact.linkedIn)} target="_blank" rel="noreferrer">
+              {label.linkedInLabel}: {portfolio.contact.linkedIn}
+            </a>
+            {' · '}
+            <a href={normalizeUrl(portfolio.contact.github)} target="_blank" rel="noreferrer">
+              {label.githubLabel}: {portfolio.contact.github}
+            </a>
           </p>
           <div className="hero-actions">
             <a href={`mailto:${portfolio.contact.email}`} className="btn-primary">
-              {ui.actions.contact}
+              {label.actions.contact}
             </a>
-            <a href={`${import.meta.env.BASE_URL}resume_google_kimhyoyeol.pdf`} className="btn-secondary">
-              {ui.actions.resume}
+            <a href={`${import.meta.env.BASE_URL}${resumeFileName}`} className="btn-secondary">
+              {label.actions.resume}
             </a>
           </div>
         </section>
 
         {!slug && (
           <section className="section cta-banner">
-            <h2>{ui.actions.share}</h2>
-            <p>{ui.bannerMessage}</p>
+            <h2>{label.actions.share}</h2>
+            <p>{label.bannerMessage}</p>
             <a href={`mailto:${portfolio.contact.email}`} className="btn-accent">
-              {ui.actions.contact}
+              {label.actions.contact}
             </a>
           </section>
         )}
 
         {slug && !selectedProject && (
           <section className="section">
-            <p className="meta">{ui.projectNotFound}</p>
-            <a href={getSectionHash(locale, 'projects')} className="btn-secondary">
-              {ui.return}
+            <p className="meta">{label.projectNotFound}</p>
+            <a href={getSectionHash('projects')} className="btn-secondary">
+              {label.return}
             </a>
           </section>
         )}

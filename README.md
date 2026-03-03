@@ -5,11 +5,13 @@ React + TypeScript + Vite portfolio optimized for long-term expansion.
 ## Features
 
 - Resume-content driven data structure in `src/data/portfolio.ts`
-- Project cards list with route-like detail mode via hash URLs (`#/en/project/<slug>` or `#/ko/project/<slug>`)
-- EN/KO UI toggle for main labels and key CTAs
+- Project cards with hash-based detail views (`#/project/<slug>`)
+- English-only content and navigation
 - CTA blocks for portfolio, project review, and contact handoff
 - GitHub Pages-friendly build
 - Deployment automation via GitHub Actions
+
+Current resume file in `public/`: `main_resume_kimhyoyeol.pdf`
 
 ## Local Setup
 
@@ -38,7 +40,7 @@ export GITHUB_REPOSITORY=<owner>/kimhyoyeol-portfolio   # 필요 시 base 경로
 npm run deploy
 ```
 
-GitHub Actions(`main` 브랜치 푸시)로 배포하면, 워크플로우에서 `npm run deploy`를 실행하므로 `base`가 자동 적용됩니다.
+GitHub Actions(`master` 또는 `main` 브랜치 푸시)로 배포하면, 워크플로우에서 `npm run deploy`를 실행하므로 `base`가 자동 적용됩니다.
 
 로컬에서 루트 도메인 배포(예: `<username>.github.io`)를 쓰는 경우에는 `base`가 `/`가 맞습니다.
 레포지토리 페이지 배포(예: `<username>.github.io/<repo-name>`)는 `base`가 `/<repo-name>/`가 되어야 합니다.
@@ -49,16 +51,16 @@ GitHub Actions(`main` 브랜치 푸시)로 배포하면, 워크플로우에서 `
 
 Use links in the format:
 
-- `#/en/project/snap-q` (or `#/ko/project/snap-q`)
-- `#/en/project/honeypot` (or `#/ko/project/honeypot`)
-- `#/en/project/sram-noise` (or `#/ko/project/sram-noise`)
+- `#/project/snap-q`
+- `#/project/honeypot`
+- `#/project/labit-lab`
+- `#/project/sram-noise`
 
 Each link opens a project-focused detail panel and keeps the rest of the page data-driven.
 
 ### Route-like Section Navigation
 
-Section links now use locale-prefixed anchors:
+Section links now use hash anchors:
 
-- `#/en/summary`, `#/en/experience`, `#/en/projects`, `#/en/skills`, `#/en/contact`
-- `#/ko/summary`, `#/ko/experience`, `#/ko/projects`, `#/ko/skills`, `#/ko/contact`
-- `#/en` or `#/ko` opens with `summary` section as default.
+- `#/summary`, `#/experience`, `#/projects`, `#/skills`, `#/contact`
+- `#/` (or empty hash) opens on `summary`

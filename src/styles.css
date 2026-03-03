@@ -9,6 +9,38 @@
   --ink: #1b2a64;
   --brand: #0a72ff;
   --brand-soft: #dcecff;
+  --chip-default-bg: #f4f7ff;
+  --chip-default-border: var(--panel-border);
+  --chip-default-color: var(--text);
+  --chip-default-icon: var(--brand);
+  --chip-ai-bg: #eef2ff;
+  --chip-ai-border: #d8dfff;
+  --chip-ai-color: #2f3d79;
+  --chip-ai-icon: #4b5bd9;
+  --chip-backend-bg: #ecf8ff;
+  --chip-backend-border: #c8e5fb;
+  --chip-backend-color: #1f4766;
+  --chip-backend-icon: #1b7dbb;
+  --chip-cloud-bg: #f0f4ff;
+  --chip-cloud-border: #d4dfff;
+  --chip-cloud-color: #32406d;
+  --chip-cloud-icon: #4a62d4;
+  --chip-data-bg: #ecf7f2;
+  --chip-data-border: #caece0;
+  --chip-data-color: #1d5843;
+  --chip-data-icon: #2b8a67;
+  --chip-language-bg: #eef4ff;
+  --chip-language-border: #d0e0ff;
+  --chip-language-color: #2f4372;
+  --chip-language-icon: #4f6dd6;
+  --chip-ops-bg: #f5eef9;
+  --chip-ops-border: #e1d4ef;
+  --chip-ops-color: #4b315d;
+  --chip-ops-icon: #8a53b8;
+  --chip-infra-bg: #fff0f0;
+  --chip-infra-border: #ffd2d2;
+  --chip-infra-color: #602323;
+  --chip-infra-icon: #af3030;
   --shadow: 0 20px 45px rgba(11, 44, 102, 0.12);
   --radius: 20px;
 }
@@ -290,15 +322,239 @@ li + li {
 
 .chip {
   display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   padding: 0.35rem 0.65rem;
   border-radius: 999px;
   font-size: 0.8rem;
-  border: 1px solid var(--panel-border);
-  background: #f4f7ff;
+  border: 1px solid var(--chip-default-border);
+  background: var(--chip-default-bg);
+  color: var(--chip-default-color);
+  position: relative;
+  cursor: default;
 }
 
-.stacked {
-  background: #eef8ff;
+.chip:focus-visible {
+  outline: 2px solid rgba(10, 114, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.chip-tone {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22rem;
+  border-radius: 999px;
+  padding: 0.04rem 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.5);
+  line-height: 1.2;
+}
+
+.chip-tone-icon {
+  width: 0.68rem;
+  height: 0.68rem;
+}
+
+.chip-tone-ai,
+.chip-tone-ai .chip-tone-icon {
+  color: var(--chip-ai-icon);
+  border-color: var(--chip-ai-border);
+  background: rgba(75, 91, 217, 0.13);
+}
+
+.chip-tone-backend,
+.chip-tone-backend .chip-tone-icon {
+  color: var(--chip-backend-icon);
+  border-color: var(--chip-backend-border);
+  background: rgba(27, 125, 187, 0.13);
+}
+
+.chip-tone-cloud,
+.chip-tone-cloud .chip-tone-icon {
+  color: var(--chip-cloud-icon);
+  border-color: var(--chip-cloud-border);
+  background: rgba(74, 98, 212, 0.13);
+}
+
+.chip-tone-data,
+.chip-tone-data .chip-tone-icon {
+  color: var(--chip-data-icon);
+  border-color: var(--chip-data-border);
+  background: rgba(43, 138, 103, 0.13);
+}
+
+.chip-tone-language,
+.chip-tone-language .chip-tone-icon {
+  color: var(--chip-language-icon);
+  border-color: var(--chip-language-border);
+  background: rgba(80, 109, 214, 0.13);
+}
+
+.chip-tone-ops,
+.chip-tone-ops .chip-tone-icon {
+  color: var(--chip-ops-icon);
+  border-color: var(--chip-ops-border);
+  background: rgba(138, 83, 184, 0.13);
+}
+
+.chip-tone-infra,
+.chip-tone-infra .chip-tone-icon {
+  color: var(--chip-infra-icon);
+  border-color: var(--chip-infra-border);
+  background: rgba(175, 48, 48, 0.13);
+}
+
+.chip[data-tooltip]::after,
+.chip[data-tooltip]::before {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 10;
+}
+
+.chip[data-tooltip]::after {
+  content: attr(data-tooltip);
+  bottom: calc(100% + 8px);
+  transform: translate(-50%, 6px);
+  background: #0f1f4d;
+  color: #fff;
+  display: block;
+  border-radius: 8px;
+  font-size: 0.74rem;
+  line-height: 1.35;
+  padding: 0.45rem 0.58rem;
+  text-align: left;
+  min-width: 10rem;
+  max-width: 20rem;
+  white-space: pre-line;
+  box-shadow: 0 8px 22px rgba(11, 35, 80, 0.2);
+}
+
+.chip[data-tooltip]::before {
+  content: '';
+  border-style: solid;
+  border-width: 6px 6px 0 6px;
+  border-color: #0f1f4d transparent transparent transparent;
+  bottom: calc(100% + 2px);
+}
+
+.chip[data-tooltip]:hover::after,
+.chip[data-tooltip]:hover::before,
+.chip[data-tooltip]:focus-visible::after,
+.chip[data-tooltip]:focus-visible::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%);
+}
+
+.chip-default,
+.chip-default.stacked {
+  border: 1px solid var(--chip-default-border);
+  background: var(--chip-default-bg);
+  color: var(--chip-default-color);
+}
+
+.chip-default .skill-icon {
+  color: var(--chip-default-icon);
+}
+
+.chip-ai,
+.chip-ai.stacked {
+  border-color: var(--chip-ai-border);
+  background: var(--chip-ai-bg);
+  color: var(--chip-ai-color);
+}
+
+.chip-ai .skill-icon {
+  color: var(--chip-ai-icon);
+}
+
+.chip-backend,
+.chip-backend.stacked {
+  border-color: var(--chip-backend-border);
+  background: var(--chip-backend-bg);
+  color: var(--chip-backend-color);
+}
+
+.chip-backend .skill-icon {
+  color: var(--chip-backend-icon);
+}
+
+.chip-cloud,
+.chip-cloud.stacked {
+  border-color: var(--chip-cloud-border);
+  background: var(--chip-cloud-bg);
+  color: var(--chip-cloud-color);
+}
+
+.chip-cloud .skill-icon {
+  color: var(--chip-cloud-icon);
+}
+
+.chip-data,
+.chip-data.stacked {
+  border-color: var(--chip-data-border);
+  background: var(--chip-data-bg);
+  color: var(--chip-data-color);
+}
+
+.chip-data .skill-icon {
+  color: var(--chip-data-icon);
+}
+
+.chip-language,
+.chip-language.stacked {
+  border-color: var(--chip-language-border);
+  background: var(--chip-language-bg);
+  color: var(--chip-language-color);
+}
+
+.chip-language .skill-icon {
+  color: var(--chip-language-icon);
+}
+
+.chip-ops,
+.chip-ops.stacked {
+  border-color: var(--chip-ops-border);
+  background: var(--chip-ops-bg);
+  color: var(--chip-ops-color);
+}
+
+.chip-ops .skill-icon {
+  color: var(--chip-ops-icon);
+}
+
+.chip-infra,
+.chip-infra.stacked {
+  border-color: var(--chip-infra-border);
+  background: var(--chip-infra-bg);
+  color: var(--chip-infra-color);
+}
+
+.chip-infra .skill-icon {
+  color: var(--chip-infra-icon);
+}
+
+.skill-icon {
+  width: 0.95rem;
+  height: 0.95rem;
+  line-height: 1;
+}
+
+.skill-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
 }
 
 .projects {
@@ -344,28 +600,6 @@ li + li {
 
 .skill-group h4 {
   margin: 0;
-}
-
-.lang-switch {
-  margin-left: auto;
-  display: inline-flex;
-  border: 1px solid var(--panel-border);
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.lang-switch button {
-  border: 0;
-  padding: 0.3rem 0.7rem;
-  color: var(--ink);
-  font-weight: 600;
-  background: transparent;
-  cursor: pointer;
-}
-
-.lang-switch button.active {
-  background: var(--brand);
-  color: #fff;
 }
 
 .cta-banner {
