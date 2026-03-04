@@ -466,14 +466,21 @@ function App() {
     const nextSlug = getProjectSlugFromHash(window.location.hash);
     const nextSection = getSectionFromHash(window.location.hash);
     setSlug(nextSlug);
-    if (!nextSlug && nextSection) {
+    if (nextSlug) {
+      scrollToSection('projects');
+      return;
+    }
+    if (nextSection) {
       scrollToSection(nextSection);
     }
   };
 
   useEffect(() => {
+    const initialSlug = getProjectSlugFromHash(window.location.hash);
     const initialSection = getSectionFromHash(window.location.hash);
-    if (initialSection) {
+    if (initialSlug) {
+      scrollToSection('projects');
+    } else if (initialSection) {
       scrollToSection(initialSection);
     }
 

@@ -180,7 +180,7 @@ export const portfolio: PortfolioData = {
       en: '2022',
     },
     detail: {
-      en: 'GPA: 3.65/4.5 — Capstone: Copper Nanoparticle Paste Improvement for Automotive Semiconductor Die-attach Process',
+      en: 'Capstone: Copper Nanoparticle Paste Improvement for Automotive Semiconductor Die-attach Process',
     },
   },
   certs: {
