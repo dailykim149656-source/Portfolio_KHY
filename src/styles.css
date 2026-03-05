@@ -216,13 +216,85 @@ h1 {
 
 .hero-meta {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 0.5rem 1rem;
   color: var(--muted);
 }
 
 .hero-meta a {
-  color: var(--brand);
+  color: inherit;
+  text-decoration: none;
+}
+
+.contact-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.6rem 0.9rem;
+  margin: 0.9rem 0 0.2rem;
+}
+
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.35rem 0.45rem 0.35rem 0.3rem;
+  border-radius: 999px;
+  border: 1px solid rgba(10, 114, 255, 0.16);
+  background: linear-gradient(120deg, rgba(250, 253, 255, 0.96), rgba(236, 245, 255, 0.92));
+  color: var(--ink);
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.contact-link:hover {
+  transform: translateY(-1px);
+  border-color: rgba(10, 114, 255, 0.3);
+  box-shadow: 0 10px 20px rgba(12, 49, 120, 0.12);
+  background: linear-gradient(120deg, rgba(247, 252, 255, 1), rgba(227, 241, 255, 0.95));
+}
+
+.contact-link:focus-visible {
+  outline: 2px solid rgba(10, 114, 255, 0.45);
+  outline-offset: 2px;
+}
+
+.contact-icon-badge {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  border: 1px solid rgba(10, 114, 255, 0.28);
+  background: linear-gradient(150deg, #ffffff, #dcecff);
+  color: #1f63c5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.contact-icon {
+  width: 0.82rem;
+  height: 0.82rem;
+}
+
+.contact-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  min-width: 0;
+}
+
+.contact-kicker {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--muted);
+}
+
+.contact-value {
+  font-size: 0.87rem;
+  font-weight: 600;
+  color: #123b7a;
+  overflow-wrap: anywhere;
 }
 
 main {
@@ -644,6 +716,15 @@ li + li {
   .hero-copy {
     margin-top: 2rem;
     padding: 0.6rem 0;
+  }
+
+  .hero-meta,
+  .contact-list {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-link {
+    width: 100%;
   }
 
   .btn-primary,

@@ -16,7 +16,10 @@ import {
   FaRocket,
   FaGlobe,
   FaDocker,
+  FaEnvelopeOpenText,
   FaGithub,
+  FaLinkedinIn,
+  FaPhoneAlt,
   FaTachometerAlt,
   FaSearch,
   FaFlask,
@@ -237,6 +240,40 @@ function SkillChip({
       {hasTone && tone && showToneLabel ? <ToneBadge tone={tone} showLabel /> : null}
       <span>{name}</span>
     </span>
+  );
+}
+
+function ContactLink({
+  href,
+  ariaLabel,
+  labelText,
+  value,
+  icon: Icon,
+  external = false,
+}: {
+  href: string;
+  ariaLabel: string;
+  labelText: string;
+  value: string;
+  icon: IconType;
+  external?: boolean;
+}) {
+  return (
+    <a
+      href={href}
+      className="contact-link"
+      target={external ? '_blank' : undefined}
+      rel={external ? 'noreferrer' : undefined}
+      aria-label={ariaLabel}
+    >
+      <span className="contact-icon-badge" aria-hidden="true">
+        <Icon className="contact-icon" />
+      </span>
+      <span className="contact-copy">
+        <span className="contact-kicker">{labelText}</span>
+        <span className="contact-value">{value}</span>
+      </span>
+    </a>
   );
 }
 
@@ -501,33 +538,38 @@ function App() {
         </nav>
         <div className="hero-copy">
           <h1>{portfolio.name}</h1>
-          <p className="hero-meta">
-            <a href={`mailto:${portfolio.contact.email}`} aria-label={`${label.contactLabel}: ${portfolio.contact.email}`}>
-              {label.contactLabel}: {portfolio.contact.email}
-            </a>
-            <a
+          <div className="hero-meta">
+            <ContactLink
+              href={`mailto:${portfolio.contact.email}`}
+              ariaLabel={`${label.contactLabel}: ${portfolio.contact.email}`}
+              labelText={label.contactLabel}
+              value={portfolio.contact.email}
+              icon={FaEnvelopeOpenText}
+            />
+            <ContactLink
               href={normalizePhoneHref(portfolio.contact.phone)}
-              aria-label={`${label.phoneLabel}: ${portfolio.contact.phone}`}
-            >
-              {label.phoneLabel}: {portfolio.contact.phone}
-            </a>
-            <a
+              ariaLabel={`${label.phoneLabel}: ${portfolio.contact.phone}`}
+              labelText={label.phoneLabel}
+              value={portfolio.contact.phone}
+              icon={FaPhoneAlt}
+            />
+            <ContactLink
               href={normalizeUrl(portfolio.contact.linkedIn)}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={`LinkedIn: ${portfolio.contact.linkedIn}`}
-            >
-              {label.linkedInLabel}: {portfolio.contact.linkedIn}
-            </a>
-            <a
+              ariaLabel={`LinkedIn: ${portfolio.contact.linkedIn}`}
+              labelText={label.linkedInLabel}
+              value={portfolio.contact.linkedIn}
+              icon={FaLinkedinIn}
+              external
+            />
+            <ContactLink
               href={normalizeUrl(portfolio.contact.github)}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={`GitHub: ${portfolio.contact.github}`}
-            >
-              {label.githubLabel}: {portfolio.contact.github}
-            </a>
-          </p>
+              ariaLabel={`GitHub: ${portfolio.contact.github}`}
+              labelText={label.githubLabel}
+              value={portfolio.contact.github}
+              icon={FaGithub}
+              external
+            />
+          </div>
         </div>
       </header>
 
@@ -605,19 +647,38 @@ function App() {
         <section id="contact" className="section">
           <h2>{label.contactTitle}</h2>
           <p>{label.contactText}</p>
-          <p className="meta">
-            {label.contactLabel}: <a href={`mailto:${portfolio.contact.email}`}>{portfolio.contact.email}</a> · {label.phoneLabel}:{' '}
-            <a href={normalizePhoneHref(portfolio.contact.phone)}>{portfolio.contact.phone}</a>
-          </p>
-          <p className="meta">
-            <a href={normalizeUrl(portfolio.contact.linkedIn)} target="_blank" rel="noreferrer">
-              {label.linkedInLabel}: {portfolio.contact.linkedIn}
-            </a>
-            {' · '}
-            <a href={normalizeUrl(portfolio.contact.github)} target="_blank" rel="noreferrer">
-              {label.githubLabel}: {portfolio.contact.github}
-            </a>
-          </p>
+          <div className="contact-list">
+            <ContactLink
+              href={`mailto:${portfolio.contact.email}`}
+              ariaLabel={`${label.contactLabel}: ${portfolio.contact.email}`}
+              labelText={label.contactLabel}
+              value={portfolio.contact.email}
+              icon={FaEnvelopeOpenText}
+            />
+            <ContactLink
+              href={normalizePhoneHref(portfolio.contact.phone)}
+              ariaLabel={`${label.phoneLabel}: ${portfolio.contact.phone}`}
+              labelText={label.phoneLabel}
+              value={portfolio.contact.phone}
+              icon={FaPhoneAlt}
+            />
+            <ContactLink
+              href={normalizeUrl(portfolio.contact.linkedIn)}
+              ariaLabel={`LinkedIn: ${portfolio.contact.linkedIn}`}
+              labelText={label.linkedInLabel}
+              value={portfolio.contact.linkedIn}
+              icon={FaLinkedinIn}
+              external
+            />
+            <ContactLink
+              href={normalizeUrl(portfolio.contact.github)}
+              ariaLabel={`GitHub: ${portfolio.contact.github}`}
+              labelText={label.githubLabel}
+              value={portfolio.contact.github}
+              icon={FaGithub}
+              external
+            />
+          </div>
           <div className="hero-actions">
             <a href={`mailto:${portfolio.contact.email}`} className="btn-primary">
               {label.actions.contact}
