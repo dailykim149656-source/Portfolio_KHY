@@ -500,20 +500,7 @@ function App() {
           ))}
         </nav>
         <div className="hero-copy">
-          <p className="eyebrow">{portfolio.title.en}</p>
           <h1>{portfolio.name}</h1>
-          <p className="intro">{portfolio.summary.en}</p>
-          <div className="hero-actions">
-            <a href={getSectionHash('projects')} className="btn-primary">
-              {label.actions.explore}
-            </a>
-            <a href={`${import.meta.env.BASE_URL}${resumeFileName}`} className="btn-secondary">
-              {label.actions.resume}
-            </a>
-            <a href={`mailto:${portfolio.contact.email}`} className="btn-accent">
-              {label.actions.contact}
-            </a>
-          </div>
           <p className="hero-meta">
             <a href={`mailto:${portfolio.contact.email}`} aria-label={`${label.contactLabel}: ${portfolio.contact.email}`}>
               {label.contactLabel}: {portfolio.contact.email}
@@ -665,3 +652,4 @@ function App() {
 }
 
 export default App;
+
