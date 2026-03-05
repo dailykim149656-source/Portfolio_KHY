@@ -20,6 +20,23 @@ npm install
 npm run dev
 ```
 
+## Export Linked PDF
+
+```bash
+npx playwright install chromium   # first-time setup
+npm run export:pdf
+```
+
+Optional (rewrite internal links to production origin in PDF):
+
+```bash
+PDF_PUBLIC_ORIGIN=https://dailykim149656-source.github.io/Portfolio_KHY npm run export:pdf
+```
+
+Output file:
+
+- `dist/portfolio-linked.pdf`
+
 ## GitHub Pages 배포
 
 ```bash
