@@ -431,6 +431,14 @@ export const portfolio: PortfolioData = {
           tone: 'ai',
         },
       ],
+      links: [
+        {
+          href: 'https://www.linkedin.com/posts/kimhyoyeol_activity-7415780477254541312-ttNM?utm_source=share&utm_medium=member_desktop&rcm=ACoAACkMWEQB20TCGIFoYe8EtrvrSv7ot_DcjjM',
+          label: {
+            en: 'LinkedIn Post',
+          },
+        },
+      ],
       notes: {
         en: ['Summary is adapted from LinkedIn posts and project timeline notes.'],
       },
@@ -493,6 +501,14 @@ export const portfolio: PortfolioData = {
           icon: 'cogs',
           iconLabel: 'HR workflow design',
           tone: 'ops',
+        },
+      ],
+      links: [
+        {
+          href: 'https://www.linkedin.com/posts/kimhyoyeol_activity-7416846994914115584-MkTB?utm_source=share&utm_medium=member_desktop&rcm=ACoAACkMWEQB20TCGIFoYe8EtrvrSv7ot_DcjjM',
+          label: {
+            en: 'LinkedIn Post',
+          },
         },
       ],
       notes: {
@@ -575,6 +591,14 @@ export const portfolio: PortfolioData = {
           icon: 'sse',
           iconLabel: 'SSE',
           tone: 'ops',
+        },
+      ],
+      links: [
+        {
+          href: 'https://www.linkedin.com/posts/kimhyoyeol_ms-ai-school-%EC%B5%9C%EC%A2%85-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EC%97%90-%EB%8C%80%ED%95%B4-%EC%A0%95%EB%A6%AC%ED%95%B4%EB%B3%B4%EC%95%98%EC%8A%B5%EB%8B%88%EB%8B%A4-activity-7434870216364318720-MKY6?utm_source=share&utm_medium=member_desktop&rcm=ACoAACkMWEQB20TCGIFoYe8EtrvrSv7ot_DcjjM',
+          label: {
+            en: 'LinkedIn Post',
+          },
         },
       ],
       notes: {
