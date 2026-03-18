@@ -155,6 +155,11 @@ nav a:hover {
   padding: 2rem;
 }
 
+.hero-title-block {
+  display: grid;
+  gap: 0.55rem;
+}
+
 h1 {
   font-size: clamp(2.2rem, 4vw, 3.4rem);
   line-height: 1.05;
@@ -167,13 +172,6 @@ h1 {
   font-size: 0.78rem;
   color: var(--brand);
   margin: 0;
-}
-
-.intro {
-  max-width: 70ch;
-  color: var(--muted);
-  margin: 0;
-  line-height: 1.65;
 }
 
 .hero-actions {
@@ -324,6 +322,10 @@ h2 {
   margin-bottom: 0.9rem;
 }
 
+.subtle {
+  opacity: 0.88;
+}
+
 .timeline {
   display: grid;
   gap: 1rem;
@@ -337,6 +339,13 @@ h2 {
   background: linear-gradient(160deg, #fff, #f9fbff);
 }
 
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
 .project-detail {
   border: 1px solid var(--panel-border);
   background: linear-gradient(160deg, #fff, #f6fbff);
@@ -346,6 +355,27 @@ h2 {
 
 .project-actions {
   margin-top: 0.9rem;
+}
+
+.chip-controls {
+  margin-bottom: 1rem;
+}
+
+.chip-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(10, 114, 255, 0.16);
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--muted);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.chip-toggle input {
+  accent-color: var(--brand);
 }
 
 .project-actions .btn-secondary,
@@ -641,6 +671,7 @@ li + li {
 
 .project-links {
   margin-bottom: 0.3rem;
+  line-height: 1.6;
 }
 
 .project-links a {

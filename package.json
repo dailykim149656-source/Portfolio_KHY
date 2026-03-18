@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "test:smoke": "node scripts/smoke-test.mjs",
     "typecheck": "tsc --noEmit",
     "export:pdf": "node scripts/export-pdf.mjs",
     "preview": "vite preview",

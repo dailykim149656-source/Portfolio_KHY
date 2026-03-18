@@ -1,83 +1,86 @@
 # Kim Hyoyeol Portfolio
 
-React + TypeScript + Vite portfolio optimized for long-term expansion.
+React + TypeScript + Vite portfolio optimized for static hosting on GitHub Pages.
 
 ## Features
 
-- Resume-content driven data structure in `src/data/portfolio.ts`
-- Project cards with hash-based detail views (`#/project/<slug>`)
-- English-only content and navigation
-- CTA blocks for portfolio, project review, and contact handoff
-- GitHub Pages-friendly build
-- Deployment automation via GitHub Actions
-
-Current resume file in `public/`: `main_resume_kimhyoyeol.pdf`
+- Data-driven portfolio content in `src/data/portfolio.ts`
+- Hash-based section navigation and project detail routes
+- Locale-ready content model with English default rendering
+- Linked PDF export for offline sharing
+- Browser smoke test for key navigation flows
+- GitHub Actions deployment to `gh-pages`
 
 ## Local Setup
 
 ```bash
 npm install
+npx playwright install chromium
 npm run dev
+```
+
+## Validation
+
+```bash
+npm run typecheck
+npm run build
+npm run test:smoke
+```
+
+If `dist/` is already up to date, you can skip the extra build inside the smoke test:
+
+```bash
+npm run test:smoke -- --skip-build
 ```
 
 ## Export Linked PDF
 
 ```bash
-npx playwright install chromium   # first-time setup
+npx playwright install chromium
 npm run export:pdf
 ```
 
-Optional (rewrite internal links to production origin in PDF):
+Optional: rewrite internal links in the PDF to the production origin.
 
 ```bash
 PDF_PUBLIC_ORIGIN=https://dailykim149656-source.github.io/Portfolio_KHY npm run export:pdf
 ```
 
-Output file:
+Output:
 
 - `dist/portfolio-linked.pdf`
 
-## GitHub Pages 배포
+## Deployment
 
-```bash
-npm run build        # 로컬 배포용 파일 확인
-npm run deploy       # gh-pages 브랜치에 업로드
-```
+GitHub Actions deploys on pushes to `main` or `master`.
 
-## 배포 실행 순서
-
-1. GitHub 레포지토리 생성 후 리포지토리명을 확인
-   - 예: `https://github.com/<owner>/kimhyoyeol-portfolio`
-2. GitHub Pages 설정에서 배포 소스를 `gh-pages` 브랜치로 지정
-3. 로컬 배포(루트에서 직접 배포할 때):
+Local deployment still works:
 
 ```bash
 npm run build
-export GITHUB_REPOSITORY=<owner>/kimhyoyeol-portfolio   # 필요 시 base 경로 강제
 npm run deploy
 ```
 
-GitHub Actions(`master` 또는 `main` 브랜치 푸시)로 배포하면, 워크플로우에서 `npm run deploy`를 실행하므로 `base`가 자동 적용됩니다.
+The Vite config defaults to a relative base path, which works well for standard GitHub Pages repository deployments. If you need a fixed absolute base path for another host, set `BASE_PATH` during build:
 
-로컬에서 루트 도메인 배포(예: `<username>.github.io`)를 쓰는 경우에는 `base`가 `/`가 맞습니다.
-레포지토리 페이지 배포(예: `<username>.github.io/<repo-name>`)는 `base`가 `/<repo-name>/`가 되어야 합니다.
+```bash
+BASE_PATH=/Portfolio_KHY/ npm run build
+```
 
-## 라우팅 규칙
+## Routes
 
-### Route-like Project Detail
-
-Use links in the format:
+Project detail routes:
 
 - `#/project/snap-q`
 - `#/project/honeypot`
 - `#/project/labit-lab`
 - `#/project/sram-noise`
 
-Each link opens a project-focused detail panel and keeps the rest of the page data-driven.
+Section routes:
 
-### Route-like Section Navigation
-
-Section links now use hash anchors:
-
-- `#/summary`, `#/experience`, `#/projects`, `#/skills`, `#/contact`
-- `#/` (or empty hash) opens on `summary`
+- `#/summary`
+- `#/experience`
+- `#/projects`
+- `#/skills`
+- `#/contact`
+- `#/`
