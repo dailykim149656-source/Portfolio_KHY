@@ -1,5 +1,5 @@
-import type { PortfolioData } from '../../data/portfolio';
 import { uiText } from '../../content/ui';
+import type { PortfolioData } from '../../data/portfolio';
 
 export function CtaBanner({ portfolio }: { portfolio: PortfolioData }) {
   return (

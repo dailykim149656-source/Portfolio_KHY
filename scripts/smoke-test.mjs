@@ -61,14 +61,23 @@ async function main() {
     const initialText = await page.locator('body').textContent();
     assertCondition(initialText?.includes('Jan 2022 - 2024') ?? false, 'Expected cleaned experience period text.');
     assertCondition(
-      initialText?.includes('Microsoft AI School - Advanced ML Engineering Program (2025-present)') ?? false,
+      initialText?.includes('Microsoft Certified: Azure AI Fundamentals (AI-900)') ?? false,
       'Expected cleaned certification text.',
     );
-    assertCondition(
-      initialText?.includes('Project A: SNAP-Q - AI Vehicle Damage Assessment') ?? false,
-      'Expected cleaned project title text.',
-    );
+    assertCondition(initialText?.includes('AI/Backend Engineer') ?? false, 'Expected cleaned hero title text.');
+    assertCondition(initialText?.includes('Docsy') ?? false, 'Expected Docsy content to be present.');
     assertCondition(!initialText?.includes('??'), 'Found unexpected mojibake marker "??".');
+
+    await page.goto(appUrl(server.origin, '#/engagement'), { waitUntil: 'networkidle' });
+    await assertVisibleHeading(page, '#engagement h2', 'Current Engagement');
+    assertCondition(
+      (await page.locator('#engagement').textContent())?.includes('2025 - February 2026') ?? false,
+      'Expected engagement dates to match the resume.',
+    );
+    assertCondition(
+      (await page.locator('#engagement').textContent())?.includes('Korean') ?? false,
+      'Expected structured language metadata in engagement.',
+    );
 
     await page.goto(appUrl(server.origin, '#/skills'), { waitUntil: 'networkidle' });
     await assertVisibleHeading(page, '#skills h2', 'Technical Skills');
@@ -79,12 +88,13 @@ async function main() {
     const projectLinks = await page.locator('#projects .project-card a.btn-secondary').evaluateAll((links) =>
       links.map((link) => link.getAttribute('href')),
     );
-    for (const slug of ['snap-q', 'honeypot', 'labit-lab', 'sram-noise']) {
+    assertCondition(projectLinks[0] === '#/project/docsy', 'Expected Docsy to be the first project.');
+    for (const slug of ['docsy', 'labit-lab', 'snap-q', 'honeypot', 'sram-noise']) {
       assertCondition(projectLinks.includes(`#/project/${slug}`), `Missing project route for slug "${slug}".`);
     }
 
-    await page.goto(appUrl(server.origin, '#/project/labit-lab'), { waitUntil: 'networkidle' });
-    await assertVisibleHeading(page, '.project-detail h3', 'Project Detail: Project C: LabIT (Lab By Intelligence) - Smart Lab Assistant & Dashboard');
+    await page.goto(appUrl(server.origin, '#/project/docsy'), { waitUntil: 'networkidle' });
+    await assertVisibleHeading(page, '.project-detail h3', 'Project Detail: Project A: DOCSY - AI Document Workflow Agent (Live Domain)');
     await page.getByRole('button', { name: 'Back to projects' }).click();
     await page.waitForURL(/#\/projects$/);
 

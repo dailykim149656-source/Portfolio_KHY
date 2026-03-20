@@ -6,6 +6,7 @@ React + TypeScript + Vite portfolio optimized for static hosting on GitHub Pages
 
 - Data-driven portfolio content in `src/data/portfolio.ts`
 - Hash-based section navigation and project detail routes
+- Dedicated engagement section for current training and language metadata
 - Locale-ready content model with English default rendering
 - Linked PDF export for offline sharing
 - Browser smoke test for key navigation flows
@@ -25,6 +26,7 @@ npm run dev
 npm run typecheck
 npm run build
 npm run test:smoke
+node scripts/verify-resume-sync.mjs "F:/resume-source/main_resume_kimhyoyeol.pdf"
 ```
 
 If `dist/` is already up to date, you can skip the extra build inside the smoke test:
@@ -80,6 +82,7 @@ Section routes:
 
 - `#/summary`
 - `#/experience`
+- `#/engagement`
 - `#/projects`
 - `#/skills`
 - `#/contact`

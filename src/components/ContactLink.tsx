@@ -1,7 +1,6 @@
 import { IconType } from 'react-icons';
 import { FaEnvelopeOpenText, FaGithub, FaLinkedinIn, FaPhoneAlt } from 'react-icons/fa';
 import { uiText } from '../content/ui';
-import type { PortfolioData } from '../data/portfolio';
 
 type ContactLinkProps = {
   href: string;
@@ -51,7 +50,12 @@ export function ContactLinks({
   contact,
   variant,
 }: {
-  contact: PortfolioData['contact'];
+  contact: {
+    email: string;
+    phone: string;
+    linkedIn: string;
+    github: string;
+  };
   variant: 'hero' | 'section';
 }) {
   const className = variant === 'hero' ? 'hero-meta' : 'contact-list';

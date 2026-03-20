@@ -1,10 +1,11 @@
 import type { Section } from '../lib/hashRouting';
 
-export const sectionOrder: Section[] = ['summary', 'experience', 'projects', 'skills', 'contact'];
+export const sectionOrder: Section[] = ['summary', 'experience', 'engagement', 'projects', 'skills', 'contact'];
 
 export const sectionLabels: Record<Section, string> = {
   summary: 'Summary',
   experience: 'Experience',
+  engagement: 'Engagement',
   projects: 'Projects',
   skills: 'Skills',
   contact: 'Contact',
@@ -21,6 +22,7 @@ export const uiText = {
   },
   summary: 'Summary',
   experience: 'Professional Experience',
+  engagementTitle: 'Current Engagement',
   projects: 'Selected Projects',
   skills: 'Technical Skills',
   contactTitle: 'Contact',
@@ -30,8 +32,11 @@ export const uiText = {
   contactLabel: 'Email',
   linkedInLabel: 'LinkedIn',
   githubLabel: 'GitHub',
-  bannerMessage: 'Tell me your team context and I can suggest an implementation plan in a practical stack.',
-  contactText: 'Need help with ML inference and deployment strategy? Let me know what you want to solve.',
+  languagesTitle: 'Languages',
+  languageLevelLabel: 'Level',
+  completedLabel: 'Completed',
+  bannerMessage: 'Tell me about your AI workflow, backend platform, or deployment constraints and I can map out a practical implementation approach.',
+  contactText: 'Need help with AI workflow systems, backend platforms, or deployment readiness? Tell me what you want to solve.',
   approach: 'Approach',
   outcomes: 'Outcomes',
   techStack: 'Tech Stack',

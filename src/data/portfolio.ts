@@ -10,6 +10,19 @@ export interface SkillItem {
   tooltip?: LocalizedText;
 }
 
+export interface LanguageItem {
+  name: LocalizedText;
+  level: LocalizedText;
+}
+
+export interface EngagementItem {
+  title: LocalizedText;
+  period: LocalizedText;
+  status: LocalizedText;
+  summary: LocalizedText;
+  details: LocalizedList;
+}
+
 export type PortfolioIconId =
   | 'brain'
   | 'chartLine'
@@ -98,12 +111,14 @@ export interface PortfolioData {
   title: LocalizedText;
   summary: LocalizedText;
   experiences: ExperienceItem[];
+  engagements: EngagementItem[];
   education: {
     school: LocalizedText;
     period: LocalizedText;
     detail: LocalizedText;
   };
   certs: LocalizedList;
+  languages: LanguageItem[];
   skills: SkillGroup[];
   projects: ProjectItem[];
 }
@@ -113,15 +128,15 @@ const list = (en: string[], ko?: string[]): LocalizedList => (ko ? { en, ko } : 
 
 export const portfolio: PortfolioData = {
   name: 'Kim Hyoyeol',
-  title: text('Cloud/AI Systems Engineer'),
+  title: text('AI/Backend Engineer'),
   contact: {
     email: 'daliykim149656@gmail.com',
-    phone: '+82 10 9398 8411',
+    phone: '(+82) 010-9398-8411',
     linkedIn: 'https://linkedin.com/in/kimhyoyeol',
     github: 'https://github.com/dailykim149656-source',
   },
   summary: text(
-    'Cloud/AI systems engineer with a semiconductor process engineering background and hands-on experience in ML proof-of-concept development and backend platforms. Led LabIT (Lab By Intelligence; MS AI SCHOOL final project) to 1st Place (Grand Prize), developing a full-stack PoC system with FastAPI, Next.js, Azure OpenAI, SQL Server, and Redis. Combines PyTorch modeling, API development, and manufacturing-grade root-cause analysis to optimize reliability, latency, throughput, and operational outcomes.',
+    'AI/Backend Engineer with a semiconductor process engineering foundation and hands-on experience in production-focused ML and backend systems. Completed Microsoft AI School (Feb 2026) and led LabIT (Lab By Intelligence) to 1st Place (Grand Prize), delivering a full-stack platform with FastAPI, Next.js, Azure OpenAI, SQL Server, and Redis. Deployed and maintained Docsy on a live domain with Firebase Hosting, Cloud Run, Vertex AI, and Firestore, emphasizing review-first AI workflows, authentication/session handling, and runtime readiness checks.',
   ),
   experiences: [
     {
@@ -147,15 +162,38 @@ export const portfolio: PortfolioData = {
       ]),
     },
   ],
+  engagements: [
+    {
+      title: text('Microsoft AI School - Advanced ML Engineering Program'),
+      period: text('2025 - February 2026'),
+      status: text('Completed'),
+      summary: text(
+        'Advanced ML engineering program focused on ML systems engineering, model evaluation, and Azure deployment; final project LabIT (Lab By Intelligence) won 1st Place (Grand Prize).',
+      ),
+      details: list([
+        'Completed an advanced ML engineering program focused on ML systems engineering, model evaluation, and Azure deployment.',
+        'Led LabIT (Lab By Intelligence; Smart Lab Assistant & Dashboard) to 1st Place (Grand Prize) as the final project.',
+      ]),
+    },
+  ],
   education: {
-    school: text('B.S. Advanced Materials Science & Engineering, Sungkyunkwan University (SKKU)'),
+    school: text('B.S. Advanced Materials Science & Engineering, Sungkyunkwan Univ. (SKKU)'),
     period: text('2022'),
-    detail: text('Capstone: Copper Nanoparticle Paste Improvement for Automotive Semiconductor Die-attach Process'),
+    detail: text('GPA: 3.65/4.5 - Capstone: Copper Nanoparticle Paste Improvement for Automotive Semiconductor Die-attach Process'),
   },
   certs: list([
-    'Microsoft Azure AI Fundamentals (AI-900)',
-    'Microsoft AI School - Advanced ML Engineering Program (2025-present)',
+    'Microsoft Certified: Azure AI Fundamentals (AI-900)',
   ]),
+  languages: [
+    {
+      name: text('Korean'),
+      level: text('Native'),
+    },
+    {
+      name: text('English'),
+      level: text('Advanced'),
+    },
+  ],
   skills: [
     {
       group: text('AI & Deep Learning'),
@@ -269,7 +307,7 @@ export const portfolio: PortfolioData = {
       ],
     },
     {
-      group: text('Systems Engineering'),
+      group: text('Systems Thinking'),
       items: [
         {
           name: text('Latency/throughput profiling'),
@@ -298,7 +336,7 @@ export const portfolio: PortfolioData = {
       ],
     },
     {
-      group: text('Programming'),
+      group: text('Programming & Languages'),
       items: [
         {
           name: text('Python'),
@@ -317,143 +355,85 @@ export const portfolio: PortfolioData = {
   ],
   projects: [
     {
-      slug: 'snap-q',
-      title: text('Project A: SNAP-Q - AI Vehicle Damage Assessment'),
-      period: text('2-week PoC sprint'),
-      role: text('Led vision model segment lead'),
+      slug: 'docsy',
+      title: text('Project A: DOCSY - AI Document Workflow Agent (Live Domain)'),
+      period: text('Live domain deployment'),
+      role: text('Owned full-stack delivery across frontend and AI backend'),
       problem: text(
-        'Need a vision model that can generate repair cost estimates with usable uncertainty from real-world vehicle damage photos.',
+        'Deployment-focused technical documentation workflow system needed review-first AI patching instead of silent edits.',
       ),
       approach: list([
-        'Built a multi-model vision pipeline using PyTorch in CUDA-based Azure ML Studio on scalable GPU infrastructure.',
-        'Led Mask R-CNN damage segmentation and prioritized accuracy on real-world camera images.',
-        'Built Bayesian fusion logic combining segmentation and classification for uncertainty-aware estimation.',
-      ]),
-      outcomes: list([
-        'Built an end-to-end PoC prototype generating preliminary repair cost estimates with uncertainty ranges.',
-        'Built a practical segmentation and classification architecture for experimentation.',
+        'Built the frontend with React and Vite and the AI backend with Node.js and Gemini on Vertex AI.',
+        'Implemented structured action/patch JSON generation and a patch-review UX instead of silent edits.',
+        'Shipped the live domain on Firebase Hosting and Cloud Run with readiness checks and Firestore-shared OAuth state.',
       ]),
       stack: [
         {
-          name: text('PyTorch'),
-          icon: 'pytorch',
-          iconLabel: text('PyTorch'),
+          name: text('React/Vite'),
+          icon: 'js',
+          iconLabel: text('React/Vite'),
+          tone: 'language',
+        },
+        {
+          name: text('Node.js'),
+          icon: 'bolt',
+          iconLabel: text('Node.js'),
+          tone: 'backend',
+        },
+        {
+          name: text('Gemini'),
+          icon: 'brain',
+          iconLabel: text('Gemini'),
           tone: 'ai',
         },
         {
-          name: text('Azure ML Studio'),
-          icon: 'azure',
-          iconLabel: text('Azure ML Studio'),
+          name: text('Vertex AI'),
+          icon: 'cloud',
+          iconLabel: text('Vertex AI'),
           tone: 'cloud',
         },
         {
-          name: text('Azure ML'),
-          icon: 'azure',
-          iconLabel: text('Azure ML'),
+          name: text('Firebase Hosting'),
+          icon: 'globe',
+          iconLabel: text('Firebase Hosting'),
           tone: 'cloud',
         },
         {
-          name: text('Mask R-CNN'),
-          icon: 'robot',
-          iconLabel: text('Mask R-CNN'),
-          tone: 'ai',
+          name: text('Cloud Run'),
+          icon: 'rocket',
+          iconLabel: text('Cloud Run'),
+          tone: 'cloud',
         },
         {
-          name: text('Classification models'),
-          icon: 'chartLine',
-          iconLabel: text('Classification models'),
-          tone: 'ai',
-        },
-        {
-          name: text('Bayesian fusion'),
-          icon: 'target',
-          iconLabel: text('Bayesian fusion'),
-          tone: 'ai',
+          name: text('Firestore'),
+          icon: 'database',
+          iconLabel: text('Firestore'),
+          tone: 'data',
         },
       ],
-      links: [
-        {
-          href: 'https://www.linkedin.com/posts/kimhyoyeol_activity-7415780477254541312-ttNM?utm_source=share&utm_medium=member_desktop&rcm=ACoAACkMWEQB20TCGIFoYe8EtrvrSv7ot_DcjjM',
-          label: text('LinkedIn Post'),
-        },
-      ],
-      notes: list(['Summary is adapted from LinkedIn posts and project timeline notes.']),
-    },
-    {
-      slug: 'honeypot',
-      title: text('Project B: HONEYPOT - AI Knowledge Handover Chatbot & Documentation System'),
-      period: text('HR SaaS platform'),
-      role: text('PM / Architecture Lead'),
-      problem: text('Knowledge gaps recur across departures, transfers, role changes, and extended absences.'),
-      approach: list([
-        'Designed modular service architecture configurable by team and role for handover workflows.',
-        'Defined a handover JSON schema with reusable fields and metadata for durable transitions.',
-        'Built RAG preprocessing with context-preserving summaries, metadata tagging, and robust chunking.',
-        'Defined Azure and self-hosted deployment architecture options for later production hardening.',
-      ]),
       outcomes: list([
-        'Created a repeatable handover architecture with durable, role-aware documentation structure.',
-        'Improved retrieval quality for organizational knowledge and reduced loss during transitions.',
+        'Established health and smoke checks for runtime readiness.',
+        'Implemented Firestore-shared OAuth state.',
+        'Implemented a hosted session-cookie contract for consistent auth behavior.',
       ]),
-      stack: [
-        {
-          name: text('FastAPI'),
-          icon: 'fastapi',
-          iconLabel: text('FastAPI'),
-          tone: 'backend',
-        },
-        {
-          name: text('Azure AI Search'),
-          icon: 'azure',
-          iconLabel: text('Azure AI Search'),
-          tone: 'cloud',
-        },
-        {
-          name: text('RAG'),
-          icon: 'rag',
-          iconLabel: text('RAG'),
-          tone: 'ai',
-        },
-        {
-          name: text('JSON schema design'),
-          icon: 'code',
-          iconLabel: text('JSON schema design'),
-          tone: 'backend',
-        },
-        {
-          name: text('HR workflow design'),
-          icon: 'cogs',
-          iconLabel: text('HR workflow design'),
-          tone: 'ops',
-        },
-      ],
-      links: [
-        {
-          href: 'https://www.linkedin.com/posts/kimhyoyeol_activity-7416846994914115584-MkTB?utm_source=share&utm_medium=member_desktop&rcm=ACoAACkMWEQB20TCGIFoYe8EtrvrSv7ot_DcjjM',
-          label: text('LinkedIn Post'),
-        },
-      ],
-      notes: list([
-        'Project direction and framing were validated through practical usage scenarios and operational constraints.',
-      ]),
+      notes: list(['Live domain deployment emphasized review-first AI workflows and runtime readiness checks.']),
     },
     {
       slug: 'labit-lab',
-      title: text('Project C: LabIT (Lab By Intelligence) - Smart Lab Assistant & Dashboard'),
+      title: text('Project B: LabIT (Lab By Intelligence) - Smart Lab Assistant & Dashboard'),
       period: text('MS AI SCHOOL final project (1st Place, Grand Prize)'),
-      role: text('Backend lead and integration owner'),
+      role: text('Led backend architecture and integration'),
       problem: text(
         'Laboratory operations needed a smarter support workflow combining knowledge retrieval, action history, and operational follow-up.',
       ),
       approach: list([
-        'Designed FastAPI-based backend architecture with SQL Server data model and dashboard API contracts.',
-        'Integrated Azure OpenAI with LangChain SQL Agent for domain-aware prompting and tool call workflows.',
-        'Implemented JWT access and refresh flow, CSRF protection, RBAC, Redis-backed rate limiting, and audit logging.',
-        'Built multilingual processing and implemented Azure deployment workflow prototypes (GitHub Actions, App Service, Static Web Apps) with basic monitoring and cache-backed tuning.',
+        'Designed the FastAPI backend architecture with SQL Server data models and dashboard API contracts.',
+        'Integrated Azure OpenAI with LangChain SQL Agent and domain prompting plus SSE streaming chat.',
+        'Implemented JWT and CSRF auth, RBAC, Redis rate limiting, audit logging, and Azure deployment workflow prototypes.',
       ]),
       outcomes: list([
         'Delivered a full-stack PoC platform for AI-assisted lab operations with FastAPI, Next.js, Azure OpenAI, SQL Server, and Redis.',
-        'Won 1st Place (Grand Prize) and improved consistency for AI-assisted lab workflows.',
+        'Won 1st Place (Grand Prize) as the final project.',
       ]),
       stack: [
         {
@@ -511,13 +491,133 @@ export const portfolio: PortfolioData = {
           label: text('LinkedIn Post'),
         },
       ],
+      notes: list(['Completed Microsoft AI School in February 2026.']),
+    },
+    {
+      slug: 'snap-q',
+      title: text('Project C: SNAP-Q - AI Vehicle Damage Assessment'),
+      period: text('2-week PoC sprint'),
+      role: text('Led Mask R-CNN damage segmentation'),
+      problem: text(
+        'Need a vision model that could generate repair cost estimates with usable uncertainty from real-world vehicle damage photos.',
+      ),
+      approach: list([
+        'Built a multi-model vision pipeline using PyTorch in CUDA-based Azure ML Studio on scalable GPU infrastructure.',
+        'Prioritized robustness on real-world camera inputs while segmenting damage with Mask R-CNN.',
+        'Built Bayesian fusion logic combining segmentation and classifier outputs for uncertainty-aware estimation.',
+      ]),
+      outcomes: list([
+        'Delivered an end-to-end prototype for repair-cost estimates with uncertainty ranges.',
+        'Kept the segmentation and classification stack practical for experimentation.',
+      ]),
+      stack: [
+        {
+          name: text('PyTorch'),
+          icon: 'pytorch',
+          iconLabel: text('PyTorch'),
+          tone: 'ai',
+        },
+        {
+          name: text('Azure ML Studio'),
+          icon: 'azure',
+          iconLabel: text('Azure ML Studio'),
+          tone: 'cloud',
+        },
+        {
+          name: text('Azure ML'),
+          icon: 'azure',
+          iconLabel: text('Azure ML'),
+          tone: 'cloud',
+        },
+        {
+          name: text('Mask R-CNN'),
+          icon: 'robot',
+          iconLabel: text('Mask R-CNN'),
+          tone: 'ai',
+        },
+        {
+          name: text('Classification models'),
+          icon: 'chartLine',
+          iconLabel: text('Classification models'),
+          tone: 'ai',
+        },
+        {
+          name: text('Bayesian fusion'),
+          icon: 'target',
+          iconLabel: text('Bayesian fusion'),
+          tone: 'ai',
+        },
+      ],
+      links: [
+        {
+          href: 'https://www.linkedin.com/posts/kimhyoyeol_activity-7415780477254541312-ttNM?utm_source=share&utm_medium=member_desktop&rcm=ACoAACkMWEQB20TCGIFoYe8EtrvrSv7ot_DcjjM',
+          label: text('LinkedIn Post'),
+        },
+      ],
+    },
+    {
+      slug: 'honeypot',
+      title: text('Project D: HONEYPOT - AI Knowledge Handover Chatbot & Documentation System'),
+      period: text('HR SaaS platform'),
+      role: text('PM / Architecture Lead'),
+      problem: text(
+        'Knowledge gaps recur across departures, transfers, role changes, and extended absences.',
+      ),
+      approach: list([
+        'Designed modular services configurable by team and role for handover workflows.',
+        'Defined a handover JSON schema with reusable fields and metadata for durable transitions.',
+        'Built RAG preprocessing with context-preserving summaries, metadata tagging, and robust chunking.',
+        'Defined Azure and self-hosted deployment architecture options for later production hardening.',
+      ]),
+      outcomes: list([
+        'Created a repeatable handover architecture with durable, role-aware documentation structure.',
+        'Improved retrieval quality for organizational knowledge and reduced loss during transitions.',
+      ]),
+      stack: [
+        {
+          name: text('FastAPI'),
+          icon: 'fastapi',
+          iconLabel: text('FastAPI'),
+          tone: 'backend',
+        },
+        {
+          name: text('Azure AI Search'),
+          icon: 'search',
+          iconLabel: text('Azure AI Search'),
+          tone: 'cloud',
+        },
+        {
+          name: text('RAG'),
+          icon: 'rag',
+          iconLabel: text('RAG'),
+          tone: 'ai',
+        },
+        {
+          name: text('JSON schema design'),
+          icon: 'code',
+          iconLabel: text('JSON schema design'),
+          tone: 'backend',
+        },
+        {
+          name: text('HR workflow design'),
+          icon: 'cogs',
+          iconLabel: text('HR workflow design'),
+          tone: 'ops',
+        },
+      ],
+      links: [
+        {
+          href: 'https://www.linkedin.com/posts/kimhyoyeol_activity-7416846994914115584-MkTB?utm_source=share&utm_medium=member_desktop&rcm=ACoAACkMWEQB20TCGIFoYe8EtrvrSv7ot_DcjjM',
+          label: text('LinkedIn Post'),
+        },
+      ],
       notes: list([
-        'Backend-first architecture plus security and performance tuning were central to the deliverable.',
+        'Project direction and framing were validated through practical usage scenarios and operational constraints.',
       ]),
     },
     {
       slug: 'sram-noise',
-      title: text('Project D: SRAM Reliability Exploration Tooling (SPICE + ML Acceleration)'),
+      title: text('Project E: SRAM Reliability Exploration Tooling (SPICE + ML Acceleration)'),
       period: text('Individual project'),
       role: text('Research engineer'),
       problem: text(
@@ -530,7 +630,7 @@ export const portfolio: PortfolioData = {
         'Tracked reliability metrics (SNM, BER, noise sigma, margins) with multi-target training and validation.',
       ]),
       outcomes: list([
-        'Reduced benchmark wall-clock from 119.916s to 89.253s (about 1.34x faster).',
+        'Reduced benchmark wall-clock from 119.916 s to 89.253 s (1.34x faster).',
         'Achieved 4/5 open PDK flow pass coverage with 1/5 PSP runtime blocker and clearer reproducibility gates.',
       ]),
       stack: [
@@ -587,6 +687,12 @@ export const portfolio: PortfolioData = {
           icon: 'sql',
           iconLabel: text('SQL Server'),
           tone: 'data',
+        },
+        {
+          name: text('GitHub Actions'),
+          icon: 'githubActions',
+          iconLabel: text('GitHub Actions'),
+          tone: 'infra',
         },
       ],
       notes: list([

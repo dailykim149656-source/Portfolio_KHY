@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { CtaBanner } from './components/sections/CtaBanner';
 import { ContactSection } from './components/sections/ContactSection';
+import { EngagementSection } from './components/sections/EngagementSection';
 import { ExperienceSection } from './components/sections/ExperienceSection';
 import { Hero } from './components/sections/Hero';
 import { ProjectsSection } from './components/sections/ProjectsSection';
@@ -50,6 +51,7 @@ function App() {
       <main>
         <SummarySection portfolio={portfolio} locale={locale} />
         <ExperienceSection portfolio={portfolio} locale={locale} />
+        <EngagementSection portfolio={portfolio} locale={locale} />
         <ProjectsSection
           projects={portfolio.projects}
           locale={locale}

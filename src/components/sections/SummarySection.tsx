@@ -4,8 +4,6 @@ import type { Locale } from '../../lib/i18n';
 import { resolveLocalizedList, resolveLocalizedText } from '../../lib/i18n';
 
 export function SummarySection({ portfolio, locale }: { portfolio: PortfolioData; locale: Locale }) {
-  const certifications = resolveLocalizedList(portfolio.certs, locale).join(' | ');
-
   return (
     <section id="summary" className="section">
       <h2>{uiText.summary}</h2>
@@ -16,7 +14,7 @@ export function SummarySection({ portfolio, locale }: { portfolio: PortfolioData
         {resolveLocalizedText(portfolio.education.detail, locale)}
       </p>
       <p className="meta">
-        {uiText.certLabel}: {certifications}
+        {uiText.certLabel}: {resolveLocalizedList(portfolio.certs, locale).join(' | ')}
       </p>
     </section>
   );

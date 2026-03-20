@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "test:smoke": "node scripts/smoke-test.mjs",
+    "verify:resume-sync": "node scripts/verify-resume-sync.mjs",
     "typecheck": "tsc --noEmit",
     "export:pdf": "node scripts/export-pdf.mjs",
     "preview": "vite preview",

@@ -1,7 +1,7 @@
-export type Section = 'summary' | 'experience' | 'projects' | 'skills' | 'contact';
+export type Section = 'summary' | 'experience' | 'engagement' | 'projects' | 'skills' | 'contact';
 
 export function getSectionFromHash(hash: string): Section | null {
-  const match = hash.match(/^#\/?(summary|experience|projects|skills|contact)$/);
+  const match = hash.match(/^#\/?(summary|experience|engagement|projects|skills|contact)$/);
   if (match) {
     return match[1] as Section;
   }
