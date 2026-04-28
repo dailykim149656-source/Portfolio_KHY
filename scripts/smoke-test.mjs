@@ -148,7 +148,9 @@ async function main() {
     assertCondition((await page.locator('#posts pre code').count()) >= 1, 'Expected rendered fenced code block.');
     await page.getByRole('link', { name: 'Back to posts' }).click();
     await page.waitForURL(/#\/posts$/);
-    assertCondition((await page.locator('#posts .post-card').count()) === 3, 'Expected return to post index.');
+    await page.locator('#posts .post-detail-card').waitFor({ state: 'detached' });
+    await page.locator('#posts .post-list-card').nth(2).waitFor();
+    assertCondition((await page.locator('#posts .post-list-card').count()) === 3, 'Expected return to post index.');
 
     await page.goto(appUrl(server.origin, '#/posts/not-a-real-post'), { waitUntil: 'networkidle' });
     assertCondition(
