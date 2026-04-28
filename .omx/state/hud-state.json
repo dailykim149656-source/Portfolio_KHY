@@ -1,6 +1,6 @@
 {
-  "last_turn_at": "2026-04-28T06:14:52.015Z",
-  "turn_count": 17,
-  "last_progress_at": "2026-04-28T06:14:52.015Z",
-  "last_agent_output": "{\"message\":\"Add detailed posts pages with markdown previews\"}"
+  "last_turn_at": "2026-04-28T08:48:59.948Z",
+  "turn_count": 19,
+  "last_progress_at": "2026-04-28T08:48:59.948Z",
+  "last_agent_output": "수정 완료했습니다.\n\n**변경 파일**\n- [scripts/smoke-test.mjs](F:/portfolio-project-260303/scripts/smoke-test.mjs:"
 }

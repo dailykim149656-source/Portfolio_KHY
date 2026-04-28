@@ -136,6 +136,9 @@ async function main() {
 
     await page.locator('#posts a', { hasText: 'Read post' }).first().click();
     await page.waitForURL(/#\/posts\/ai-workflow-review$/);
+    await page.locator('#posts .post-detail-card').waitFor();
+    await page.locator('#posts', { hasText: 'The useful product is not only the answer' }).waitFor();
+    await page.locator('#posts pre code').first().waitFor();
     await assertVisibleHeading(page, '#posts h2', 'Posts');
     assertCondition((await page.locator('#summary').count()) === 0, 'Expected post detail to stay on the posts page.');
     assertCondition(
