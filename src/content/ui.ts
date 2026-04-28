@@ -1,29 +1,43 @@
-import type { Section } from '../lib/hashRouting';
+import type { NavTarget } from '../lib/hashRouting';
 
-export const sectionOrder: Section[] = ['summary', 'experience', 'engagement', 'projects', 'skills', 'contact'];
+export const sectionOrder: NavTarget[] = ['summary', 'experience', 'engagement', 'projects', 'posts', 'skills', 'contact'];
 
-export const sectionLabels: Record<Section, string> = {
+export const sectionLabels: Record<NavTarget, string> = {
   summary: 'Summary',
   experience: 'Experience',
-  engagement: 'Engagement',
+  engagement: 'Training',
   projects: 'Projects',
+  posts: 'Posts',
   skills: 'Skills',
   contact: 'Contact',
 };
 
 export const uiText = {
   brand: 'KH Portfolio',
+  heroLead:
+    'AI application and technical solutions engineer connecting semiconductor process discipline with ML systems, deployment readiness, and measurable validation.',
+  heroProofs: [
+    'LabIT Grand Prize - MS AI School',
+    'Live AI documentation workflow - Docsy',
+    'Benchmarking, smoke checks, and readiness validation',
+  ],
   actions: {
     contact: 'Contact Me',
+    projects: 'View Projects',
     projectDetail: 'Open project detail',
     backToProjects: 'Back to projects',
     share: 'Discuss your project',
-    resume: 'Download Resume',
   },
   summary: 'Summary',
   experience: 'Professional Experience',
-  engagementTitle: 'Current Engagement',
+  engagementTitle: 'Education & Training',
   projects: 'Selected Projects',
+  posts: 'Posts',
+  lastUpdated: 'Last updated',
+  noPosts: 'No posts yet.',
+  readPost: 'Read post',
+  backToPosts: 'Back to posts',
+  postNotFound: 'Post not found',
   skills: 'Technical Skills',
   contactTitle: 'Contact',
   educationLabel: 'Education',
@@ -46,5 +60,3 @@ export const uiText = {
   projectNotFound: 'Project not found',
   return: 'Return',
 };
-
-export const resumeFileName = 'main_resume_kimhyoyeol.pdf';

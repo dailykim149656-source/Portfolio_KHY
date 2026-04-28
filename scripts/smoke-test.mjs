@@ -64,15 +64,24 @@ async function main() {
       initialText?.includes('Microsoft Certified: Azure AI Fundamentals (AI-900)') ?? false,
       'Expected cleaned certification text.',
     );
-    assertCondition(initialText?.includes('AI/Backend Engineer') ?? false, 'Expected cleaned hero title text.');
+    assertCondition(
+      initialText?.includes('AI Application & Technical Solutions Engineer') ?? false,
+      'Expected updated hero title text.',
+    );
     assertCondition(initialText?.includes('Docsy') ?? false, 'Expected Docsy content to be present.');
+    assertCondition(
+      !initialText?.includes('Review-First AI Workflow Notes'),
+      'Posts should render on the dedicated posts page, not the home page.',
+    );
+    assertCondition(!initialText?.includes('GPA'), 'GPA should not be visible.');
+    assertCondition(!initialText?.includes('Download Resume'), 'Resume download CTA should not be visible.');
     assertCondition(!initialText?.includes('??'), 'Found unexpected mojibake marker "??".');
 
     await page.goto(appUrl(server.origin, '#/engagement'), { waitUntil: 'networkidle' });
-    await assertVisibleHeading(page, '#engagement h2', 'Current Engagement');
+    await assertVisibleHeading(page, '#engagement h2', 'Education & Training');
     assertCondition(
-      (await page.locator('#engagement').textContent())?.includes('2025 - February 2026') ?? false,
-      'Expected engagement dates to match the resume.',
+      (await page.locator('#engagement').textContent())?.includes('2025 - Feb 2026') ?? false,
+      'Expected engagement dates to match the latest resume content.',
     );
     assertCondition(
       (await page.locator('#engagement').textContent())?.includes('Korean') ?? false,
@@ -94,7 +103,7 @@ async function main() {
     }
 
     await page.goto(appUrl(server.origin, '#/project/docsy'), { waitUntil: 'networkidle' });
-    await assertVisibleHeading(page, '.project-detail h3', 'Project Detail: Project A: DOCSY - AI Document Workflow Agent (Live Domain)');
+    await assertVisibleHeading(page, '.project-detail h3', 'Project Detail: Docsy - AI Document Workflow Agent');
     await page.getByRole('button', { name: 'Back to projects' }).click();
     await page.waitForURL(/#\/projects$/);
 
@@ -104,8 +113,52 @@ async function main() {
       'Expected not found state for an unknown project slug.',
     );
 
-    const resumeHref = await page.locator('#contact a.btn-secondary').getAttribute('href');
-    assertCondition(resumeHref?.endsWith('main_resume_kimhyoyeol.pdf') ?? false, 'Resume link is incorrect.');
+    await page.goto(appUrl(server.origin, '#/posts'), { waitUntil: 'networkidle' });
+    await assertVisibleHeading(page, '#posts h2', 'Posts');
+    assertCondition((await page.locator('#summary').count()) === 0, 'Expected posts to render as a dedicated page.');
+    const postsText = await page.locator('#posts').textContent();
+    assertCondition((await page.locator('#posts .post-card').count()) === 3, 'Expected three example posts.');
+    assertCondition((await page.locator('#posts a', { hasText: 'Read post' }).count()) === 3, 'Expected post read links.');
+    assertCondition(
+      postsText?.includes('Review-First AI Workflow Notes') ?? false,
+      'Expected review-first workflow example post.',
+    );
+    assertCondition(
+      postsText?.includes('From Semiconductor Process Thinking to AI Systems') ?? false,
+      'Expected semiconductor-to-AI example post.',
+    );
+    assertCondition(
+      postsText?.includes('Deployment Readiness Checklist') ?? false,
+      'Expected deployment readiness example post.',
+    );
+    assertCondition(/Last updated: \d{4}\.\d{2}\.\d{2}/.test(postsText ?? ''), 'Expected formatted post date.');
+    assertCondition((await page.locator('#posts pre code').count()) === 0, 'Expected the index page to show previews only.');
+
+    await page.locator('#posts a', { hasText: 'Read post' }).first().click();
+    await page.waitForURL(/#\/posts\/ai-workflow-review$/);
+    await assertVisibleHeading(page, '#posts h2', 'Posts');
+    assertCondition((await page.locator('#summary').count()) === 0, 'Expected post detail to stay on the posts page.');
+    assertCondition(
+      (await page.locator('#posts').textContent())?.includes('The useful product is not only the answer') ?? false,
+      'Expected selected post body in the detail page.',
+    );
+    assertCondition((await page.locator('#posts pre code').count()) >= 1, 'Expected rendered fenced code block.');
+    await page.getByRole('link', { name: 'Back to posts' }).click();
+    await page.waitForURL(/#\/posts$/);
+    assertCondition((await page.locator('#posts .post-card').count()) === 3, 'Expected return to post index.');
+
+    await page.goto(appUrl(server.origin, '#/posts/not-a-real-post'), { waitUntil: 'networkidle' });
+    assertCondition(
+      (await page.locator('#posts').textContent())?.includes('Post not found') ?? false,
+      'Expected not found state for an unknown post slug.',
+    );
+
+    await page.getByRole('link', { name: 'Contact' }).click();
+    await page.waitForURL(/#\/contact$/);
+    await assertVisibleHeading(page, '#contact h2', 'Contact');
+
+    const pdfDownloadLinks = await page.locator('a[href*=".pdf"]').count();
+    assertCondition(pdfDownloadLinks === 0, 'Expected no public PDF download links.');
 
     const linkedInHref = await page.locator('a[href*="linkedin.com/in/kimhyoyeol"]').first().getAttribute('href');
     const githubHref = await page.locator('a[href*="github.com/dailykim149656-source"]').first().getAttribute('href');

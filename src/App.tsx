@@ -4,18 +4,31 @@ import { ContactSection } from './components/sections/ContactSection';
 import { EngagementSection } from './components/sections/EngagementSection';
 import { ExperienceSection } from './components/sections/ExperienceSection';
 import { Hero } from './components/sections/Hero';
+import { PostsSection } from './components/sections/PostsSection';
 import { ProjectsSection } from './components/sections/ProjectsSection';
 import { SkillsSection } from './components/sections/SkillsSection';
 import { SummarySection } from './components/sections/SummarySection';
+import { SiteNav } from './components/SiteNav';
 import { portfolio } from './data/portfolio';
-import { getProjectSlugFromHash, getSectionFromHash, getSectionHash, type Section } from './lib/hashRouting';
+import {
+  getPostSlugFromHash,
+  getProjectSlugFromHash,
+  getSectionFromHash,
+  getSectionHash,
+  isPostsRouteHash,
+  type Section,
+} from './lib/hashRouting';
 import { DEFAULT_LOCALE } from './lib/i18n';
 
 function App() {
   const locale = DEFAULT_LOCALE;
-  const [slug, setSlug] = useState<string | null>(() => getProjectSlugFromHash(window.location.hash));
+  const [hash, setHash] = useState(() => window.location.hash);
   const [showSkillToneLabel, setShowSkillToneLabel] = useState(false);
   const [showStackToneLabel, setShowStackToneLabel] = useState(false);
+  const slug = getProjectSlugFromHash(hash);
+  const postSlug = getPostSlugFromHash(hash);
+  const postsPage = isPostsRouteHash(hash);
+  const section = getSectionFromHash(hash);
 
   const scrollToSection = (section: Section) => {
     const target = document.getElementById(section);
@@ -26,24 +39,40 @@ function App() {
 
   useEffect(() => {
     const handleHashChange = () => {
-      const nextSlug = getProjectSlugFromHash(window.location.hash);
-      const nextSection = getSectionFromHash(window.location.hash);
-      setSlug(nextSlug);
-
-      if (nextSlug) {
-        scrollToSection('projects');
-        return;
-      }
-
-      if (nextSection) {
-        scrollToSection(nextSection);
-      }
+      setHash(window.location.hash);
     };
 
     handleHashChange();
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
+
+  useEffect(() => {
+    if (postsPage) {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+      return;
+    }
+
+    if (slug) {
+      scrollToSection('projects');
+      return;
+    }
+
+    if (section) {
+      scrollToSection(section);
+    }
+  }, [postsPage, section, slug]);
+
+  if (postsPage) {
+    return (
+      <div className="page posts-page">
+        <SiteNav />
+        <main className="posts-page-main">
+          <PostsSection requestedSlug={postSlug} />
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="page">
@@ -60,7 +89,6 @@ function App() {
           onToggleShowStackToneLabel={setShowStackToneLabel}
           onBackToProjects={() => {
             window.location.hash = getSectionHash('projects');
-            setSlug(null);
           }}
         />
         <SkillsSection

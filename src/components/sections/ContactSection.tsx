@@ -1,4 +1,4 @@
-import { resumeFileName, uiText } from '../../content/ui';
+import { uiText } from '../../content/ui';
 import type { PortfolioData } from '../../data/portfolio';
 import { ContactLinks } from '../ContactLink';
 
@@ -11,9 +11,6 @@ export function ContactSection({ portfolio }: { portfolio: PortfolioData }) {
       <div className="hero-actions">
         <a href={`mailto:${portfolio.contact.email}`} className="btn-primary">
           {uiText.actions.contact}
-        </a>
-        <a href={`${import.meta.env.BASE_URL}${resumeFileName}`} className="btn-secondary">
-          {uiText.actions.resume}
         </a>
       </div>
     </section>
